@@ -1,0 +1,7 @@
+{
+  "name": "revenue-splitter",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
