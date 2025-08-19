@@ -1,2 +1,36 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+
+:root {
+  --app-background-gradient: linear-gradient(180deg, #0D111F 23.5%, #171D31 60.5%);
+  --ion-background-color: #0b1220;
+  --ion-text-color: #e6e7eb;
+
+  --app-bg-start: #0b1220;
+  --app-bg-end: #101a33;
+
+  --ion-color-primary: #3b82f6;
+  --ion-color-primary-contrast: #0b1220;
+  --ion-color-primary-shade: #356fd1;
+  --ion-color-primary-tint: #5b97f7;
+
+  --app-card-bg: rgba(255, 255, 255, 0.06);
+  --app-card-stroke: rgba(255, 255, 255, 0.12);
+
+  --app-radius: 16px;
+  --app-shadow: 0 6px 18px rgba(0, 0, 0, .35);
+  --ion-font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+html,
+body,
+ion-app,
+ion-content {
+  background: var(--app-background-gradient) fixed;
+  color: var(--ion-text-color);
+}
+
+ion-content {
+  --background: transparent;
+  /* щоб фон ззаду не перекривався */
+}
