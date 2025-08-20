@@ -1,0 +1,19 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content {
+  padding: 24px 0;
+  flex-grow: 1;
+}
+
+.container {
+  max-width: 1580px;
+  padding: 0 16px;
+  margin: 0 auto;
+  &--max-height {
+    height: 100%;
+  }
+}

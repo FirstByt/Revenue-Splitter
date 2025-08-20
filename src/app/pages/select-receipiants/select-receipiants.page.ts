@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { IonContent } from '@ionic/angular/standalone';
-
 import { HeaderComponent } from 'src/app/components/layout/header/header.component';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  templateUrl: 'select-receipiants.page.html',
+  styleUrl: 'select-receipiants.page.scss',
   imports: [ IonContent, HeaderComponent, RouterModule],
 })
-export class HomePage {
-  constructor() {}
+
+export class SelectReceipiantsPage implements OnInit {
+  constructor() { }
+
+  ngOnInit() { }
 }

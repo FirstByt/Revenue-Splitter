@@ -1,0 +1,18 @@
+.logo-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #272B34;
+
+  background-image: url("/assets/images/logo.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 21px 21px; 
+  &--small {
+    background-size: 13px 13px; 
+  }
+}
