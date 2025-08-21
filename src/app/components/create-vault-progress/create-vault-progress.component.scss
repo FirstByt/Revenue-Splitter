@@ -2,5 +2,30 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  max-width: 280px;
+  margin: 0 auto;
+  &__item {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #404550;
+    border-radius: 50%;
+    background-color: #1F2432;
+    font-size: 8px;
+    display: grid; 
+    place-items: center;
+    font-weight: 600;
+    line-height: 1;
+    &--active {
+      border: 1px solid #31A1E5;
+    }
+    span {
+      position: relative;
+      top: -0.5px;
+    }
+  }
+  &__divider {
+    flex-grow: 1;
+    background: #404550;
+    height: 2px;
+  }
 }

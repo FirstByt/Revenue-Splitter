@@ -1,0 +1,22 @@
+.step-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &__main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px;
+    border-radius: 10px;
+    border: 0.5px solid rgba(255, 255, 255, 0.15);
+    background: rgba(72, 79, 94, 0.30);
+    backdrop-filter: blur(13.449999809265137px);
+  }
+  &__comment {
+    border-radius: 0 0 10px 10px;
+    background: rgba(28, 126, 236, 0.50);
+    padding: 8px;
+    width: 80%;
+    text-align: center;
+  }
+}
