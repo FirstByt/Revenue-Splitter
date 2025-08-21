@@ -16,3 +16,13 @@
     background-size: 13px 13px; 
   }
 }
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.align-center {
+  margin: 0 auto;
+}
