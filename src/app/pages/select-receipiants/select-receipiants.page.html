@@ -3,6 +3,7 @@
     <app-header></app-header>
     <div class="content">
       <div class="container">
+
         <div>
           <app-create-vault-progress></app-create-vault-progress>
         </div>
@@ -11,6 +12,16 @@
             mainText="Your gateway to transparent Money Split on Chain"
             commentText="In order to start, please select options bellow"
           ></app-step-info>
+          <div class="selector mt-24">
+            <div>
+              <p class="text-sm text-bold">Number of recipients</p>
+              <p class="text-xs text-mutted">Up to 10 wallets</p>
+            </div>
+            <div class="form-control">
+              <input type="number" class="plain-input text-center" placeholder="-" style="max-width: 32px">
+            </div>
+          </div>
+          <button class="button button--primary mt-24 button--w100" routerLink="/greate-vault">Continue</button>
         </div>
       </div>
     </div>

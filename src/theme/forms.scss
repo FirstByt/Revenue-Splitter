@@ -1,0 +1,22 @@
+.plain-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: inherit;
+  font: inherit; 
+  line-height: inherit;
+  padding: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font-size: 12px;  
+  font-weight: 600;
+}
+
+.form-control {
+  border-radius: 5px;
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  background: rgba(72, 79, 94, 0.30);
+  backdrop-filter: blur(13.449999809265137px);
+  padding: 10px 14px;
+}
