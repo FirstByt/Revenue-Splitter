@@ -19,4 +19,19 @@
   background: rgba(72, 79, 94, 0.30);
   backdrop-filter: blur(13.449999809265137px);
   padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 10px;
+  input {
+    max-width: 100%;
+    width: 100%;
+    font-size: 12px;
+  }
+  &__divider {
+    width: 1px;
+    height: 11px;
+    background: #3E4352;
+  }
 }
