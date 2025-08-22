@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { NavigationStart, Router } from '@angular/router';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +9,9 @@ import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
   imports: [IonApp, IonRouterOutlet],
 })
 export class AppComponent {
-  constructor() {}
+
+  private router = inject(Router);
+  constructor() {
+    this.router.events.pipe(filter(e => e instanceof NavigationStart)).subscribe(() => (document.activeElement as HTMLElement | null)?.blur());
+  }
 }

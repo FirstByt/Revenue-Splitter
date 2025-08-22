@@ -9,6 +9,10 @@ export const routes: Routes = [
     path: 'select',
     loadComponent: () => import('./pages/select-receipiants/select-receipiants.page').then((m) => m.SelectReceipiantsPage),
   },
+    {
+    path: 'create-vault',
+    loadComponent: () => import('./pages/create-vault/create-vault.page').then((m) => m.CreateVaultPage),
+  },
   {
     path: '',
     redirectTo: 'home',

@@ -6,16 +6,26 @@
   font-size: 14px;
   font-weight: 600;
   &--primary {
-    border: 0.5px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     background: #31A1E5;
     color: #FFF;
+    &:disabled {
+      color: #595F6C;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(11, 12, 14, 0.30);
+      cursor: not-allowed;
+    }
   }
-  &:disabled {
-    color: #595F6C;
-    border: 0.5px solid rgba(255, 255, 255, 0.15);
-    background: rgba(11, 12, 14, 0.30);
-    cursor: not-allowed;
+  &--primary-outline {
+    border: 1px solid #31A1E5;
+    background: #141926;
+    color: #FFF;
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   }
+
   &--w100 {
     width: 100%;
   }
