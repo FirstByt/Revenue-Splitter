@@ -1,9 +1,13 @@
 .home-content {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   gap: 24px;
   height: 100%;
+  align-items: center;
+  @media (max-width: 991px) {
+    justify-content: space-between;
+  }
 }
 
 .app-stats {
@@ -15,8 +19,11 @@
   background: rgba(72, 79, 94, 0.30);
   backdrop-filter: blur(13.449999809265137px);
   padding: 15px 20px;
+  width: 100%;
+  max-width: 1006px;
   &__item {
     text-align: center;
+    flex-grow: 1;
   }
   &__splitter {
     width: 1px;

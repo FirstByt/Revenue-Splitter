@@ -17,7 +17,20 @@
           <app-wallet name="Wallet 2"></app-wallet>
           <app-wallet name="Wallet 2"></app-wallet>
         </div>
-        <button class="button button--primary mt-24 button--w100">Create Vault</button>
+        <button class="button button--dashed mt-12 button--w100">
+          <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="8.5" cy="8.5" r="6.375" stroke="white" />
+            <path d="M8.5 10.625L8.5 6.375" stroke="white" stroke-linecap="square" />
+            <path d="M10.625 8.5L6.375 8.5" stroke="white" stroke-linecap="square" />
+          </svg>
+          <span>Add more recipients</span>
+        </button>
+        <div class="custom-toggle mt-32">
+          <span [class.active]="!isImMutable">Mutable</span>
+          <ion-toggle [(ngModel)]="isImMutable" class="hidden-toggle"></ion-toggle>
+          <span [class.active]="isImMutable">Immutable</span>
+        </div>
+        <button class="button button--primary mt-32 button--w100">Create Vault</button>
         <button class="button button--primary-outline mt-12 button--w100" routerLink="/select">Back</button>
       </div>
     </div>
