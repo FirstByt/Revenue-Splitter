@@ -11,9 +11,16 @@
   background-image: url("/assets/images/logo.png");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 21px 21px; 
+  background-size: 21px 18px; 
   &--small {
-    background-size: 13px 13px; 
+    width: 21px;
+    height: 21px;
+    background-size: 13px 11px; 
+  }
+  &--big {
+    width: 92px;
+    height: 92px;
+    background-size: 56px 48px;
   }
 }
 

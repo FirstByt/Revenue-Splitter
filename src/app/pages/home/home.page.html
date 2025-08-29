@@ -7,29 +7,35 @@
 
           <div class="only-desctop">
             <div class="header-logo" routerLink="/">
-              <div class="logo-img"></div>
-              <div>Revenue Splitter</div>
+              <div class="logo-img logo-img--big"></div>
+              <div class="title-xl">Revenue Splitter</div>
             </div>
+            <p class="mt-32 text-center">Your gateway to transparent Money Split on Chain</p>
           </div>
 
-          <div class="steps-wrapper">
+          <div class="steps-wrapper only-mobile">
             <app-step-info mainText="Your gateway to transparent Money Split on Chain"></app-step-info>
           </div>
-          <button class="button button--primary" routerLink="/select">Enter App</button>
-          <div class="app-stats">
+          <button class="button button--primary button--wider mt-32" routerLink="/select">Enter App</button>
+          <div class="app-stats mt-64">
             <div class="app-stats__item">
-              <div class="title-md">1255</div>
-              <div class="text-mutted text-md">Vaults created</div>
+              <div class="app-stats__item-value">1255</div>
+              <div class="text-mutted app-stats__item-label">Vaults created</div>
             </div>
             <div class="app-stats__splitter"></div>
             <div class="app-stats__item">
-              <div class="title-md">364</div>
-              <div class="text-mutted text-md">Transfers</div>
+              <div class="app-stats__item-value">364</div>
+              <div class="text-mutted app-stats__item-label">Transfers</div>
             </div>
             <div class="app-stats__splitter"></div>
             <div class="app-stats__item">
-              <div class="title-md">869M</div>
-              <div class="text-mutted text-md">Processed</div>
+              <div class="app-stats__item-value">869M</div>
+              <div class="text-mutted app-stats__item-label">Processed</div>
+            </div>
+            <div class="app-stats__splitter only-desctop"></div>
+            <div class="app-stats__item only-desctop">
+              <div class="app-stats__item-value">195</div>
+              <div class="text-mutted app-stats__item-label">Active Wallets</div>
             </div>
           </div>
         </div>

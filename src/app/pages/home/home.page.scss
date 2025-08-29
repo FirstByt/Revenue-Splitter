@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 24px;
   height: 100%;
   align-items: center;
   @media (max-width: 991px) {
@@ -23,11 +22,24 @@
   max-width: 1006px;
   &__item {
     text-align: center;
-    flex-grow: 1;
+    flex: 1 1 0px;
   }
   &__splitter {
     width: 1px;
     height: 35px;
     background: #424757;
+  }
+  &__item-value {
+    font-size: 42px;
+    font-weight: 700;
+    @media (max-width: 991px) {
+      font-size: 24px;
+    }
+  }
+  &__item-lebel {
+    font-size: 16px;
+    @media (max-width: 991px) {
+      font-size: 12px;
+    }
   }
 }
