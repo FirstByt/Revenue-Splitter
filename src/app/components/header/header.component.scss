@@ -9,6 +9,11 @@
     align-items: center;
     gap: 16px;
   }
+  &__buttons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
 }
 
 .header-wallet {
@@ -19,6 +24,9 @@
   border-radius: 10px;
   border: 0.5px solid var(--Gradient, #60DBF5);
   background: rgba(72, 79, 94, 0.30);
-  backdrop-filter: blur(13.449999809265137px);
+  backdrop-filter: blur(14px);
   cursor: pointer;
+  img {
+    min-width: 15px;
+  }
 }

@@ -6,7 +6,7 @@
 
         <div class="content-layout">
           <div class="content-layout__side content-layout__side--left">
-            <div>
+            <div class="content-layout__progress">
               <app-create-vault-progress></app-create-vault-progress>
             </div>
           </div>
@@ -16,18 +16,20 @@
                 commentText="In order to start, please select options bellow"
               ></app-step-info>
             </div>
-            <div class="selector mt-24">
-              <div>
-                <p class="text-sm text-bold">Number of recipients</p>
-                <p class="text-xs text-mutted">Up to 10 wallets</p>
+            <div class="content-layout__card mt-32">
+              <div class="selector mt-24">
+                <div>
+                  <p class="text-sm text-bold">Number of recipients</p>
+                  <p class="text-xs text-mutted">Up to 10 wallets</p>
+                </div>
+                <div class="form-control">
+                  <input id="cc" type="number" class="plain-input text-center" placeholder="-" style="max-width: 32px">
+                </div>
               </div>
-              <div class="form-control">
-                <input id="cc" type="number" class="plain-input text-center" placeholder="-" style="max-width: 32px">
-              </div>
+              <button class="button button--primary mt-24 button--w100" routerLink="/create-vault">Continue</button>
             </div>
-            <button class="button button--primary mt-24 button--w100" routerLink="/create-vault">Continue</button>
           </div>
-          <div class="content-layout__side content-layout__side--left"></div>
+          <div class="content-layout__side content-layout__side--right"></div>
         </div>
 
       </div>
