@@ -5,6 +5,7 @@
   &__main {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     padding: 14px;
     border-radius: 10px;
@@ -12,6 +13,11 @@
     background: rgba(72, 79, 94, 0.30);
     backdrop-filter: blur(13.449999809265137px);
     width: 100%;
+    font-size: 16px;
+    @media (max-width: 991px) {
+      font-size: 12px;
+      justify-content: initial;
+    }
   }
   &__comment {
     border-radius: 0 0 10px 10px;
@@ -19,5 +25,9 @@
     padding: 8px;
     width: 80%;
     text-align: center;
+    font-size: 10px;
+    @media (max-width: 991px) {
+      font-size: 8px;
+    }
   }
 }

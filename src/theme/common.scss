@@ -65,3 +65,24 @@
     }
   }
 }
+
+.content-layout {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 64px;
+  @media (max-width: 991px) {
+    gap: 24px;
+  }
+  @media (max-width: 991px) {
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 24px;
+  }
+  &__center {
+    max-width: 750px;
+    min-width: 750px;
+    @media (max-width: 991px) {
+      min-width: 100%;
+    }
+  }
+}
