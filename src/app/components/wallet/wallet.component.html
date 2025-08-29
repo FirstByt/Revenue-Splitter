@@ -1,14 +1,16 @@
 <div class="wallet">
   <p class="text-sm no-wrap">{{ name }}</p>
-  <div class="form-control">
-    <input id="cc" type="number" class="plain-input text-center" placeholder="-" style="max-width: 32px">
-    <div class="form-control__divider"></div>
-    <p class="text-mutted">%</p>
-  </div>
-  <div class="form-control">
-    <p class="text-mutted text-sm">Address</p>
-    <div class="form-control__divider"></div>
-    <input id="cc" type="text" class="plain-input" placeholder="-">
+  <div class="wallet__inputs">
+    <div class="form-control">
+      <input id="cc" type="number" class="plain-input text-center" placeholder="-" style="max-width: 24px">
+      <div class="form-control__divider"></div>
+      <p class="text-mutted">%</p>
+    </div>
+    <div class="form-control flex-grow">
+      <p class="text-mutted text-sm no-wrap">Wallet <span class="only-desctop">Address</span></p>
+      <div class="form-control__divider"></div>
+      <input id="cc" type="text" class="plain-input" placeholder="-">
+    </div>
   </div>
   <div class="icon-wrapper cursor-pointer">
     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
@@ -18,16 +20,16 @@
     </svg>
   </div>
   <div class="icon-wrapper cursor-pointer">
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-    <path d="M8.33337 12.5L8.33337 10" stroke="#FF3333" stroke-width="2" stroke-linecap="round" />
-    <path d="M11.6666 12.5L11.6666 10" stroke="#FF3333" stroke-width="2" stroke-linecap="round" />
-    <path
-      d="M2.5 5.83334H17.5V5.83334C17.0353 5.83334 16.803 5.83334 16.6098 5.87177C15.8164 6.02959 15.1962 6.64978 15.0384 7.44316C15 7.63636 15 7.86869 15 8.33334V12.6667C15 14.5523 15 15.4951 14.4142 16.0809C13.8284 16.6667 12.8856 16.6667 11 16.6667H9C7.11438 16.6667 6.17157 16.6667 5.58579 16.0809C5 15.4951 5 14.5523 5 12.6667V8.33334C5 7.86869 5 7.63636 4.96157 7.44316C4.80376 6.64978 4.18356 6.02959 3.39018 5.87177C3.19698 5.83334 2.96466 5.83334 2.5 5.83334V5.83334Z"
-      stroke="#FF3333" stroke-width="2" stroke-linecap="round" />
-    <path
-      d="M8.39008 2.80883C8.48504 2.72023 8.69428 2.64194 8.98536 2.5861C9.27643 2.53027 9.63307 2.5 9.99996 2.5C10.3668 2.5 10.7235 2.53027 11.0146 2.5861C11.3056 2.64194 11.5149 2.72023 11.6098 2.80883"
-      stroke="#FF3333" stroke-width="2" stroke-linecap="round" />
-  </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M8.33337 12.5L8.33337 10" stroke="#FF3333" stroke-width="2" stroke-linecap="round" />
+      <path d="M11.6666 12.5L11.6666 10" stroke="#FF3333" stroke-width="2" stroke-linecap="round" />
+      <path
+        d="M2.5 5.83334H17.5V5.83334C17.0353 5.83334 16.803 5.83334 16.6098 5.87177C15.8164 6.02959 15.1962 6.64978 15.0384 7.44316C15 7.63636 15 7.86869 15 8.33334V12.6667C15 14.5523 15 15.4951 14.4142 16.0809C13.8284 16.6667 12.8856 16.6667 11 16.6667H9C7.11438 16.6667 6.17157 16.6667 5.58579 16.0809C5 15.4951 5 14.5523 5 12.6667V8.33334C5 7.86869 5 7.63636 4.96157 7.44316C4.80376 6.64978 4.18356 6.02959 3.39018 5.87177C3.19698 5.83334 2.96466 5.83334 2.5 5.83334V5.83334Z"
+        stroke="#FF3333" stroke-width="2" stroke-linecap="round" />
+      <path
+        d="M8.39008 2.80883C8.48504 2.72023 8.69428 2.64194 8.98536 2.5861C9.27643 2.53027 9.63307 2.5 9.99996 2.5C10.3668 2.5 10.7235 2.53027 11.0146 2.5861C11.3056 2.64194 11.5149 2.72023 11.6098 2.80883"
+        stroke="#FF3333" stroke-width="2" stroke-linecap="round" />
+    </svg>
   </div>
 
 </div>

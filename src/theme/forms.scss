@@ -11,6 +11,9 @@
   appearance: none;
   font-size: 12px;  
   font-weight: 600;
+  &--primary {
+    color: #31A1E5;
+  }
 }
 
 .form-control {
@@ -28,6 +31,14 @@
     max-width: 100%;
     width: 100%;
     font-size: 12px;
+  }
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
   &__divider {
     width: 1px;

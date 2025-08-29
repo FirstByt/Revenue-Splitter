@@ -16,7 +16,7 @@ import { WlletComponent } from 'src/app/components/wallet/wallet.component';
 
 export class CreateVaultPage implements OnInit {
 
-  isImMutable = false;
+  isImMutable = true;
 
   constructor() { }
 

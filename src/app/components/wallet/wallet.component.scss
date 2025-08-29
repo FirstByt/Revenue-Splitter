@@ -2,9 +2,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 12px;
   border-radius: 10px;
   border: 0.5px solid rgba(255, 255, 255, 0.15);
   background: rgba(26, 28, 34, 0.30);
   padding: 10px 14px;
+  &__inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-grow: 1;
+  }
 }
