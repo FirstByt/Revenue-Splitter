@@ -1,0 +1,26 @@
+<ion-content [fullscreen]="true">
+  <div class="page">
+    <app-header></app-header>
+    <div class="content">
+      <div class="container">
+
+        <div class="content-layout content-layout--aline-center">
+          <div class="content-layout__center">
+            <div>
+              <app-step-info 
+                mainText="Your Vault has been created succesfully!"
+                commentText="Check bellow the Diagram"
+                ></app-step-info>
+            </div>
+            <div class="content-layout__card mt-32">
+              <div class="vault-name text-md"><span class="text-primary">Victor23</span> Vault</div>
+              <app-vault-radial></app-vault-radial>
+              <button class="button button--primary mt-12 button--w100" routerLink="/my-vaults">See My Vaults</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</ion-content>

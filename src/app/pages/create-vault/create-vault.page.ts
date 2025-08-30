@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { IonContent, IonToggle } from '@ionic/angular/standalone';
 
 import { CreateVaultProgressComponent } from 'src/app/components/create-vault-progress/create-vault-progress.component';
@@ -18,7 +18,11 @@ export class CreateVaultPage implements OnInit {
 
   isImMutable = true;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() { }
+
+  onCreateVault() {
+    this.router.navigate(['/create-vault-success']);
+  }
 }

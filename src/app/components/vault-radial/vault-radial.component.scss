@@ -1,0 +1,20 @@
+:host {
+  display: flex;
+  justify-content: center;
+}
+
+.vault-svg {
+  display: block;
+  overflow: visible;
+}
+.label {
+  font: 600 12px Inter, system-ui, sans-serif;
+  fill: #E7EEF9;
+}
+.label.center {
+  font-weight: 700;
+}
+.percent {
+  font: 700 12px/1 Inter, system-ui, sans-serif;
+  fill: #E7EEF9;
+}

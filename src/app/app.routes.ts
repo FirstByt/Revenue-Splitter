@@ -18,6 +18,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/my-vaults/my-vaults.page').then((m) => m.MyVaultsPage),
   },
   {
+    path: 'create-vault-success',
+    loadComponent: () => import('./pages/create-vault-success/create-vault-success.page').then((m) => m.CreateVaultSuceessPage),
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full',

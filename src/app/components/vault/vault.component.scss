@@ -1,0 +1,27 @@
+.vault {
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(26, 28, 34, 0.30);
+  border-collapse: collapse;
+  &__main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-radius: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(26, 28, 34, 0.30);
+    padding: 10px 14px;
+  }
+  &__inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-grow: 1;
+  }
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+  }
+}
