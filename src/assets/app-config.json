@@ -1,0 +1,5 @@
+{
+  "network": "devnet",
+  "rpcUrl": "https://api.devnet.solana.com",
+  "programId": "7SSiszqhzQ5hMKoJe2nXQGqEY9995ppBcPqEECNtQM48"
+}

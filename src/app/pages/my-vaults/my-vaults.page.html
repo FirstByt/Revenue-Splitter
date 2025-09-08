@@ -9,23 +9,30 @@
             <div>
               <app-step-info mainText="My Vaults and Participationss"></app-step-info>
             </div>
-            <div class="content-layout__card mt-32">
-              <div class="custom-search">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="7.33341" cy="7.33317" r="4.66667" stroke="#525764" stroke-width="2" />
-                  <path d="M13.3333 13.3335L11.3333 11.3335" stroke="#525764" stroke-width="2" stroke-linecap="round" />
-                </svg>
-                <input type="text" class="plain-input" placeholder="Search vault...">
+            <div class="content-layout__cards mt-32">
+              <div class="content-layout__card">
+                <div class="custom-search">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="7.33341" cy="7.33317" r="4.66667" stroke="#525764" stroke-width="2" />
+                    <path d="M13.3333 13.3335L11.3333 11.3335" stroke="#525764" stroke-width="2" stroke-linecap="round" />
+                  </svg>
+                  <input type="text" class="plain-input" placeholder="Search vault...">
+                </div>
+                <div class="vaults mt-24">
+                  <app-vault></app-vault>
+                  <app-vault></app-vault>
+                  <app-vault></app-vault>
+                </div>
+                <div class="mt-32">
+                  <div class="attention">IF you want to Create a new Vault Please click on the button Bellow</div>
+                </div>
+                <button class="button button--primary mt-12 button--w100" routerLink="/select">Create Another VAULT</button>
               </div>
-              <div class="vaults mt-24">
-                <app-vault></app-vault>
-                <app-vault></app-vault>
-                <app-vault></app-vault>
-              </div>
-              <div class="mt-32">
-                <div class="attention">IF you want to Create a new Vault Please click on the button Bellow</div>
-              </div>
-              <button class="button button--primary mt-12 button--w100" routerLink="/select">Create Another VAULT</button>
+              <!-- <div class="content-layout__card">
+                <div class="vault-history">
+                  history
+                </div>
+              </div> -->
             </div>
           </div>
         </div>

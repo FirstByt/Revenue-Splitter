@@ -2,6 +2,7 @@
   border-bottom: 0.5px solid rgba(255, 255, 255, 0.15);
   background: rgba(72, 79, 94, 0.30);
   backdrop-filter: blur(13.449999809265137px);
+
   &__inner {
     padding: 12px 0;
     display: flex;
@@ -9,6 +10,7 @@
     align-items: center;
     gap: 16px;
   }
+
   &__buttons {
     display: flex;
     align-items: center;
@@ -26,7 +28,56 @@
   background: rgba(72, 79, 94, 0.30);
   backdrop-filter: blur(14px);
   cursor: pointer;
+  position: relative;
+
   img {
     min-width: 15px;
   }
+}
+
+.wallet-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 220px;
+  padding: 8px;
+  border-radius: 12px;
+  z-index: 1000;
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(72, 79, 94, 0.95);
+  backdrop-filter: blur(14px);
+
+  display: grid;
+  gap: 6px;
+
+  .menu-title {
+    font-weight: 600;
+    opacity: .9;
+  }
+
+  .menu-sub {
+    font-size: 12px;
+    opacity: .75;
+    margin-bottom: 6px;
+  }
+
+  .menu-item {
+    width: 100%;
+    text-align: left;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #3E4352;
+    background: rgba(72, 79, 94, 0.30);
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .menu-item:hover {
+    border-color: #60DBF5;
+  }
+}
+
+.menu-item.disabled {
+  opacity: .7;
 }

@@ -5,15 +5,36 @@
         <div class="logo-img"></div>
         <div>Revenue Splitter</div>
       </div>
+
       <div class="header__buttons">
         <div class="only-desctop">
           <button class="button button--primary" routerLink="/my-vaults">My Vaults</button>
         </div>
-        <div class="header-wallet">
+
+        <div class="header-wallet" (click)="toggleMenu($event)">
           <div class="icon-wrapper">
-            <img src="assets/icons/wallet.svg">
+            <img src="assets/icons/wallet.svg" />
           </div>
-          <span class="text-sm no-wrap">Connect Wallet</span>
+          <span class="text-sm no-wrap">
+            {{ ws.connected() ? ws.shortPubkey() : 'Connect Wallet' }}
+          </span>
+        </div>
+
+        <div class="wallet-menu" *ngIf="menuOpen()">
+          <ng-container *ngIf="!ws.connected(); else connectedTpl">
+            <div class="menu-title">Select wallet</div>
+        
+            <button class="menu-item" *ngFor="let w of wallets()" [class.disabled]="!w.connectable"
+              (click)="w.connectable ? selectAndConnect(w.name) : onInstall(w.name, $event)">
+              {{ w.name }} <span *ngIf="!w.connectable" style="opacity:.7;">— Install</span>
+            </button>
+          </ng-container>
+        
+          <ng-template #connectedTpl>
+            <div class="menu-title">{{ ws.walletName() }}</div>
+            <div class="menu-sub">{{ ws.shortPubkey() }}</div>
+            <button class="menu-item" (click)="disconnect()">Disconnect</button>
+          </ng-template>
         </div>
       </div>
     </div>

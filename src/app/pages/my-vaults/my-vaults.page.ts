@@ -14,6 +14,8 @@ import { VaultComponent } from 'src/app/components/vault/vault.component';
 })
 
 export class MyVaultsPage implements OnInit {
+
+  history: unknown | undefined;
   
   constructor() { }
 

@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class VaultComponent implements OnInit {
+  
   constructor() { }
 
   ngOnInit() { }
