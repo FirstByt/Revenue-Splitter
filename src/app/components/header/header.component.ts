@@ -2,6 +2,7 @@ import { Component, HostListener, inject, signal, computed } from '@angular/core
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { WalletService } from 'src/app/solana/wallet.service';
+import { ConnectionService } from 'src/app/solana/connection.service';
 
 const INSTALL_URL: Record<string, string> = {
   Phantom:  'https://phantom.app/download',
@@ -18,6 +19,7 @@ const INSTALL_URL: Record<string, string> = {
 })
 export class HeaderComponent {
   ws = inject(WalletService);
+  conn = inject(ConnectionService);
   
   menuOpen = signal(false);
   wallets = computed(() => this.ws.listWallets());
@@ -41,12 +43,34 @@ export class HeaderComponent {
   onInstall(name: string, e?: Event) {
     e?.stopPropagation();
     const url = INSTALL_URL[name] ?? 'https://solana.com';
-    // DOM-lib підключена, тож window.open типізований коректно
     window.open(url, '_blank', 'noopener');
   }
 
   @HostListener('document:click')
   closeOnOutside() {
     this.menuOpen.set(false);
+  }
+
+  async testRpc() {
+    const hash = await this.conn.getLatestBlockhash();
+    console.log('Devnet blockhash:', hash);
+    const pk = this.ws.publicKey();
+    if (pk) {
+      const lamports = await this.conn.getBalance(pk);
+      console.log('Balance (lamports):', lamports);
+    }
+  }
+
+  async airdrop1() {
+    const pk = this.ws.publicKey();
+    if (!pk) return;
+    try {
+      const sig = await this.conn.airdrop(pk, 1);
+      const bal = await this.conn.getBalance(pk);
+      console.log('Airdrop tx:', sig, '→ Explorer:', `https://explorer.solana.com/tx/${sig}?cluster=devnet`);
+      console.log('New balance (lamports):', bal);
+    } catch (e: any) {
+      console.error('Airdrop failed:', e?.message ?? e);
+    }
   }
 }

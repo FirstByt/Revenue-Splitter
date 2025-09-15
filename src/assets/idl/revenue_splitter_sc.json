@@ -1,0 +1,1132 @@
+{
+  "address": "7SSiszqhzQ5hMKoJe2nXQGqEY9995ppBcPqEECNtQM48",
+  "metadata": {
+    "name": "revenue_splitter_sc",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "create_authority_info",
+      "discriminator": [64, 105, 154, 1, 38, 36, 173, 193],
+      "accounts": [
+        {
+          "name": "authority_info",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97, 117, 116, 104, 111, 114, 105, 116, 121, 95, 105, 110, 102,
+                  111
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              }
+            ]
+          }
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [99, 111, 110, 102, 105, 103]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "event_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95, 95, 101, 118, 101, 110, 116, 95, 97, 117, 116, 104, 111,
+                  114, 105, 116, 121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_splitter",
+      "discriminator": [171, 46, 163, 18, 29, 20, 82, 157],
+      "accounts": [
+        {
+          "name": "splitter",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [115, 112, 108, 105, 116, 116, 101, 114]
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              },
+              {
+                "kind": "account",
+                "path": "authority_info.splitters_amount",
+                "account": "AuthorityInfo"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": ["authority_info"]
+        },
+        {
+          "name": "authority_info",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97, 117, 116, 104, 111, 114, 105, 116, 121, 95, 105, 110, 102,
+                  111
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury",
+          "writable": true,
+          "relations": ["config"]
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [99, 111, 110, 102, 105, 103]
+              }
+            ]
+          },
+          "relations": ["authority_info"]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "event_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95, 95, 101, 118, 101, 110, 116, 95, 97, 117, 116, 104, 111,
+                  114, 105, 116, 121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "recipients",
+          "type": {
+            "vec": {
+              "defined": {
+                "name": "Recipient"
+              }
+            }
+          }
+        },
+        {
+          "name": "mutable",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "deposit_sol",
+      "discriminator": [108, 81, 78, 117, 125, 155, 56, 200],
+      "accounts": [
+        {
+          "name": "splitter",
+          "writable": true
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "treasury",
+          "writable": true,
+          "relations": ["config"]
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [99, 111, 110, 102, 105, 103]
+              }
+            ]
+          },
+          "relations": ["splitter"]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "event_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95, 95, 101, 118, 101, 110, 116, 95, 97, 117, 116, 104, 111,
+                  114, 105, 116, 121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "deposit_spl",
+      "discriminator": [224, 0, 198, 175, 198, 47, 105, 204],
+      "accounts": [
+        {
+          "name": "splitter"
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint",
+          "writable": true
+        },
+        {
+          "name": "token_account",
+          "writable": true
+        },
+        {
+          "name": "treasury",
+          "writable": true,
+          "relations": ["config"]
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [99, 111, 110, 102, 105, 103]
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "event_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95, 95, 101, 118, 101, 110, 116, 95, 97, 117, 116, 104, 111,
+                  114, 105, 116, 121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initialize",
+      "discriminator": [175, 175, 109, 31, 13, 152, 155, 237],
+      "accounts": [
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [99, 111, 110, 102, 105, 103]
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "event_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95, 95, 101, 118, 101, 110, 116, 95, 97, 117, 116, 104, 111,
+                  114, 105, 116, 121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "creation_fee",
+          "type": "u64"
+        },
+        {
+          "name": "deposit_fee",
+          "type": "u64"
+        },
+        {
+          "name": "update_fee",
+          "type": "u64"
+        },
+        {
+          "name": "treasury",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "minimal_sol_deposit",
+      "discriminator": [97, 126, 145, 234, 161, 44, 16, 6],
+      "accounts": [
+        {
+          "name": "splitter"
+        }
+      ],
+      "args": [],
+      "returns": "u64"
+    },
+    {
+      "name": "update_admin",
+      "discriminator": [161, 176, 40, 213, 60, 184, 179, 228],
+      "accounts": [
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [99, 111, 110, 102, 105, 103]
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": ["config"]
+        },
+        {
+          "name": "new_admin"
+        },
+        {
+          "name": "event_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95, 95, 101, 118, 101, 110, 116, 95, 97, 117, 116, 104, 111,
+                  114, 105, 116, 121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "update_fees",
+      "discriminator": [225, 27, 13, 6, 69, 84, 172, 191],
+      "accounts": [
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [99, 111, 110, 102, 105, 103]
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": ["config"]
+        },
+        {
+          "name": "event_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95, 95, 101, 118, 101, 110, 116, 95, 97, 117, 116, 104, 111,
+                  114, 105, 116, 121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "creation_fee",
+          "type": "u64"
+        },
+        {
+          "name": "deposit_fee",
+          "type": "u64"
+        },
+        {
+          "name": "update_fee",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "update_splitter",
+      "discriminator": [45, 2, 199, 7, 96, 249, 137, 255],
+      "accounts": [
+        {
+          "name": "splitter",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [115, 112, 108, 105, 116, 116, 101, 114]
+              },
+              {
+                "kind": "account",
+                "path": "config"
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              },
+              {
+                "kind": "account",
+                "path": "splitter.index",
+                "account": "Splitter"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": ["splitter"]
+        },
+        {
+          "name": "treasury",
+          "writable": true,
+          "relations": ["config"]
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [99, 111, 110, 102, 105, 103]
+              }
+            ]
+          },
+          "relations": ["splitter"]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "event_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95, 95, 101, 118, 101, 110, 116, 95, 97, 117, 116, 104, 111,
+                  114, 105, 116, 121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "recipients",
+          "type": {
+            "vec": {
+              "defined": {
+                "name": "Recipient"
+              }
+            }
+          }
+        },
+        {
+          "name": "mutable",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "update_treasury",
+      "discriminator": [60, 16, 243, 66, 96, 59, 254, 131],
+      "accounts": [
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [99, 111, 110, 102, 105, 103]
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": ["config"]
+        },
+        {
+          "name": "event_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95, 95, 101, 118, 101, 110, 116, 95, 97, 117, 116, 104, 111,
+                  114, 105, 116, 121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "new_treasury",
+          "type": "pubkey"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "AuthorityInfo",
+      "discriminator": [241, 50, 52, 216, 58, 126, 178, 123]
+    },
+    {
+      "name": "Config",
+      "discriminator": [155, 12, 170, 224, 30, 250, 204, 130]
+    },
+    {
+      "name": "Splitter",
+      "discriminator": [187, 177, 147, 182, 44, 155, 130, 202]
+    }
+  ],
+  "events": [
+    {
+      "name": "Deposit",
+      "discriminator": [62, 205, 242, 175, 244, 169, 136, 52]
+    },
+    {
+      "name": "MinimalDeposit",
+      "discriminator": [178, 180, 89, 190, 164, 14, 172, 15]
+    },
+    {
+      "name": "NewAdmin",
+      "discriminator": [147, 54, 123, 118, 66, 146, 201, 64]
+    },
+    {
+      "name": "NewAuthorityInfo",
+      "discriminator": [182, 142, 26, 130, 183, 138, 11, 219]
+    },
+    {
+      "name": "NewSplitter",
+      "discriminator": [225, 142, 195, 174, 128, 133, 217, 183]
+    },
+    {
+      "name": "TransferFees",
+      "discriminator": [34, 83, 249, 242, 110, 197, 250, 242]
+    },
+    {
+      "name": "UpdateFees",
+      "discriminator": [2, 138, 167, 71, 162, 154, 107, 73]
+    },
+    {
+      "name": "UpdateSplitter",
+      "discriminator": [165, 47, 17, 9, 0, 186, 230, 54]
+    },
+    {
+      "name": "UpdateTreasury",
+      "discriminator": [3, 187, 235, 218, 234, 208, 73, 135]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "UnauthorizedAdmin",
+      "msg": "Only admin can perform this action"
+    },
+    {
+      "code": 6001,
+      "name": "InvalidTreasuryAddress",
+      "msg": "Treasury address cannot be zero"
+    },
+    {
+      "code": 6002,
+      "name": "InvalidRecipientCount",
+      "msg": "Invalid number of recipients (must be between 1 and 10)"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidTotalPercentage",
+      "msg": "Total percentage must equal 100%"
+    },
+    {
+      "code": 6004,
+      "name": "ZeroPercentage",
+      "msg": "Recipient percentage cannot be zero"
+    },
+    {
+      "code": 6005,
+      "name": "DuplicateRecipient",
+      "msg": "Duplicate recipient address"
+    },
+    {
+      "code": 6006,
+      "name": "RecipientMustBeSystemAccount",
+      "msg": "Recipient must be system program"
+    },
+    {
+      "code": 6007,
+      "name": "InvalidRecipientAddress",
+      "msg": "Invalid recipient address"
+    },
+    {
+      "code": 6008,
+      "name": "RecipientNotFound",
+      "msg": "Recipient not found"
+    },
+    {
+      "code": 6009,
+      "name": "ImmutableSplitter",
+      "msg": "Immutable splitter cannot be updated"
+    },
+    {
+      "code": 6010,
+      "name": "RecipientInsufficientLamports",
+      "msg": "Recipient account has insufficient lamports"
+    }
+  ],
+  "types": [
+    {
+      "name": "AuthorityInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "config",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "splitters_amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Config",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "creation_fee",
+            "type": "u64"
+          },
+          {
+            "name": "deposit_fee",
+            "type": "u64"
+          },
+          {
+            "name": "update_fee",
+            "type": "u64"
+          },
+          {
+            "name": "treasury",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Deposit",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "depositor",
+            "type": "pubkey"
+          },
+          {
+            "name": "splitter",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "recipients",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "individual_amounts",
+            "type": {
+              "vec": "u64"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "MinimalDeposit",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "splitter",
+            "type": "pubkey"
+          },
+          {
+            "name": "minimal_deposit",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "NewAdmin",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "config",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_admin",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "NewAuthorityInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "config",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority_info",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "NewSplitter",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "config",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "splitter",
+            "type": "pubkey"
+          },
+          {
+            "name": "mutable",
+            "type": "bool"
+          },
+          {
+            "name": "recipients",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "Recipient"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Recipient",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "address",
+            "type": "pubkey"
+          },
+          {
+            "name": "percentage",
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Splitter",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "config",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "index",
+            "type": "u64"
+          },
+          {
+            "name": "recipients",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "Recipient"
+                }
+              }
+            }
+          },
+          {
+            "name": "mutable",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TransferFeeKind",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "CreateSplitter"
+          },
+          {
+            "name": "Deposit"
+          },
+          {
+            "name": "UpdateSplitter"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TransferFees",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "config",
+            "type": "pubkey"
+          },
+          {
+            "name": "payer",
+            "type": "pubkey"
+          },
+          {
+            "name": "kind",
+            "type": {
+              "defined": {
+                "name": "TransferFeeKind"
+              }
+            }
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "treasury",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateFees",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "config",
+            "type": "pubkey"
+          },
+          {
+            "name": "creation_fee",
+            "type": "u64"
+          },
+          {
+            "name": "deposit_fee",
+            "type": "u64"
+          },
+          {
+            "name": "update_fee",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateSplitter",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "splitter",
+            "type": "pubkey"
+          },
+          {
+            "name": "mutable",
+            "type": "bool"
+          },
+          {
+            "name": "recipients",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "Recipient"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateTreasury",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "config",
+            "type": "pubkey"
+          },
+          {
+            "name": "treasury",
+            "type": "pubkey"
+          }
+        ]
+      }
+    }
+  ],
+  "constants": [
+    {
+      "name": "AUTHORITY_INFO_SEED",
+      "type": "string",
+      "value": "\"authority_info\""
+    },
+    {
+      "name": "BASIS_POINTS",
+      "type": "u16",
+      "value": "100"
+    },
+    {
+      "name": "CONFIG_SEED",
+      "type": "string",
+      "value": "\"config\""
+    },
+    {
+      "name": "MAX_RECIPIENTS",
+      "type": "u64",
+      "value": "10"
+    },
+    {
+      "name": "MIN_RECIPIENTS",
+      "type": "u64",
+      "value": "1"
+    },
+    {
+      "name": "SPLITTER_SEED",
+      "type": "string",
+      "value": "\"splitter\""
+    }
+  ]
+}

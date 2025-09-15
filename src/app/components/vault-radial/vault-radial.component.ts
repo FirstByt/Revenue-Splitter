@@ -13,23 +13,19 @@ export interface VaultNode { label: string; percent: number; }
 export class VaultRadialComponent {
   width = 300;
 
-  /** відсоток у центрі */
   mainPercent = 100;
 
-  /** вузли (до 10) */
   @Input() nodes: VaultNode[] = [
     { label: 'Wallet 1', percent: 10 },
     { label: 'Wallet 2', percent: 25 },
     { label: 'Wallet 3', percent: 65 },
   ];
 
-  /** налаштування розкладки */
-  arcPaddingDeg = 20;  // як далеко від горизонталі розносити крайні
-  linkGap = 16;        // “зазор” між колами = довжина лінії
-  padTop = 8;          // візуальний відступ зверху всередині viewBox
-  padBottom = 12;      // візуальний відступ знизу
+  arcPaddingDeg = 20; 
+  linkGap = 16;   
+  padTop = 8;   
+  padBottom = 12;
 
-  /** базовий розмір координат + зовнішні поля (щоб тіні не різались) */
   size = 300;
   outerPad = 16;
   get vb() {
@@ -37,25 +33,19 @@ export class VaultRadialComponent {
     return `${-this.outerPad} ${-this.outerPad} ${s} ${s}`;
   }
 
-  /** центр по X */
   get centerX() { return this.size / 2; }
 
-  /** геометрія кіл (трохи зменшені) */
   mainR  = this.size * 0.21;
   smallR = this.size * 0.145;
 
-  /** радіус орбіти супутників (щоб лінії були довші) */
   get orbitR() { return this.mainR + this.smallR + this.linkGap; }
 
-  /** центр по Y — рахуємо так, щоб зверху/знизу були лише невеликі відступи */
   get centerY() {
-    const minCY = this.padTop + this.mainR;                      // щоб верх не прилипав
-    const maxCY = this.size - this.padBottom - (this.orbitR + this.smallR); // щоб низ помістився
-    // ставимо посередині допустимого діапазону
+    const minCY = this.padTop + this.mainR;  
+    const maxCY = this.size - this.padBottom - (this.orbitR + this.smallR); 
     return Math.max(minCY, Math.min(maxCY, (minCY + maxCY) / 2));
   }
 
-  /** позиції та лінії — тільки нижня півкуля */
   get placed() {
     const items = this.nodes.slice(0, 10);
     const n = items.length || 1;
@@ -66,8 +56,8 @@ export class VaultRadialComponent {
     else if (n === 3) angles = [30, 90, 150];
 
     if (!angles) {
-      const start = 0 + this.arcPaddingDeg;        // права нижня сторона
-      const end   = 180 - this.arcPaddingDeg;      // ліва нижня сторона
+      const start = 0 + this.arcPaddingDeg; 
+      const end   = 180 - this.arcPaddingDeg; 
       const step  = (end - start) / (n - 1);
       angles = Array.from({ length: n }, (_, i) => start + i * step);
     }

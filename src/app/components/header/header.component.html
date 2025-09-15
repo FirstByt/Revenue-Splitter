@@ -33,6 +33,8 @@
           <ng-template #connectedTpl>
             <div class="menu-title">{{ ws.walletName() }}</div>
             <div class="menu-sub">{{ ws.shortPubkey() }}</div>
+            <button class="menu-item" (click)="testRpc()">Test RPC</button>
+            <button class="menu-item" (click)="airdrop1()">Airdrop 1 SOL (devnet)</button>
             <button class="menu-item" (click)="disconnect()">Disconnect</button>
           </ng-template>
         </div>

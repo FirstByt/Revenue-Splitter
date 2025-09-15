@@ -1,7 +1,9 @@
 import { Injectable, signal, computed } from '@angular/core';
 import {
   WalletAdapterNetwork,
+  WalletDisconnectedError,
   WalletError,
+  WalletNotReadyError,
   WalletReadyState,
 } from '@solana/wallet-adapter-base';
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
@@ -65,6 +67,11 @@ export class WalletService {
       a.on('readyStateChange', () => {
         this.adapters.set([...this.adapters()]);
       });
+      a.on('error', (e: WalletError) => {
+        if (e?.name === 'WalletDisconnectedError' || e instanceof WalletDisconnectedError) return;
+        if (e?.name === 'WalletNotReadyError'    || e instanceof WalletNotReadyError)    return;
+        console.error('[wallet]', e);
+      });
     });
 
     this.adapters.set(adapters);
@@ -98,6 +105,9 @@ export class WalletService {
     this.connecting.set(true);
     try {
       await this.selected.connect();
+    } catch (e: any) {
+      if (e?.name === 'WalletDisconnectedError') return;
+      throw e;
     } finally {
       this.connecting.set(false);
     }

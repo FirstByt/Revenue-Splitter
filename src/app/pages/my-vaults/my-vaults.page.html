@@ -22,6 +22,12 @@
                   <app-vault></app-vault>
                   <app-vault></app-vault>
                   <app-vault></app-vault>
+                  <!-- <div *ngFor="let v of vaults()">
+                    <div>{{ v.address.toBase58() }} — {{ v.mutable ? 'Mutable' : 'Immutable' }}</div>
+                    <ul>
+                      <li *ngFor="let r of v.recipients">{{ r.address }} — {{ r.percentage }}%</li>
+                    </ul>
+                  </div> -->
                 </div>
                 <div class="mt-32">
                   <div class="attention">IF you want to Create a new Vault Please click on the button Bellow</div>
