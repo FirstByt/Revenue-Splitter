@@ -1,15 +1,16 @@
-<div class="wallet">
+<div class="wallet" [formGroup]="group">
   <p class="text-sm no-wrap">{{ name }}</p>
   <div class="wallet__inputs">
     <div class="form-control">
-      <input id="cc" type="number" class="plain-input text-center" placeholder="-" style="max-width: 24px">
+      <input type="number" class="plain-input text-center" placeholder="-" style="max-width: 48px"
+        formControlName="percentage">
       <div class="form-control__divider"></div>
       <p class="text-mutted">%</p>
     </div>
     <div class="form-control flex-grow">
       <p class="text-mutted text-sm no-wrap">Wallet <span class="only-desctop">Address</span></p>
       <div class="form-control__divider"></div>
-      <input id="cc" type="text" class="plain-input" placeholder="-">
+      <input type="text" class="plain-input" placeholder="-" formControlName="address">
     </div>
   </div>
   <div class="icon-wrapper cursor-pointer">
@@ -19,7 +20,7 @@
         stroke="white" stroke-width="2" />
     </svg>
   </div>
-  <div class="icon-wrapper cursor-pointer">
+  <div class="icon-wrapper cursor-pointer" (click)="removeRecipient.emit()">
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
       <path d="M8.33337 12.5L8.33337 10" stroke="#FF3333" stroke-width="2" stroke-linecap="round" />
       <path d="M11.6666 12.5L11.6666 10" stroke="#FF3333" stroke-width="2" stroke-linecap="round" />

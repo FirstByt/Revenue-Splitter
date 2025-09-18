@@ -29,5 +29,6 @@ export class MyVaultsPage implements OnInit {
 
   async load() {
     this.vaults.set(await this.svc.listMyVaults());
+    console.log(this.vaults());
   }
 }

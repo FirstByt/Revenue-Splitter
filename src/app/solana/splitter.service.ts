@@ -79,11 +79,7 @@ export class SplitterService {
     }
   }
 
-  async createVault(input: { recipients: UiRecipient[]; mutable: boolean }): Promise<{
-    signature: string;
-    splitter: PublicKey;
-    index: bigint;
-  }> {
+  async createVault(input: { recipients: UiRecipient[]; mutable: boolean }) {
     const program = await this.program();
     const programId = toPk(program.programId as any);
 
@@ -93,6 +89,8 @@ export class SplitterService {
 
     const cfgPda = findConfigPda(programId);
     const aiPda = await this.ensureAuthorityInfo();
+    const cfg = await this.fetchConfig();
+    const treasury = cfg.treasury;
 
     if (input.recipients.length < 1 || input.recipients.length > 10) {
       throw new Error('Recipients must be 1..10');
@@ -110,12 +108,16 @@ export class SplitterService {
       percentage: Number(r.percentage)
     }));
 
+    const remaining = recipientsIDL.map(r => ({
+      pubkey: r.address as PublicKey,
+      isWritable: false,
+      isSigner: false,
+    }));
+
     const splitterPda = findSplitterPda(programId, cfgPda, authority, nextIndex);
 
-    const cfg = await this.fetchConfig();
-    const treasury = cfg.treasury;
-
-    const sig: string = await (program.methods as any).createSplitter(recipientsIDL, !!input.mutable)
+    const sig: string = await (program.methods as any)
+      .createSplitter(recipientsIDL, !!input.mutable)
       .accounts({
         splitter: splitterPda,
         authority,
@@ -124,10 +126,12 @@ export class SplitterService {
         config: cfgPda,
         systemProgram: SystemProgram.programId,
       })
+      .remainingAccounts(remaining) // ⬅️ додано
       .rpc();
 
     return { signature: sig, splitter: splitterPda, index: nextIndex };
-  }
+}
+
 
   async listMyVaults(): Promise<Array<{
     address: PublicKey;

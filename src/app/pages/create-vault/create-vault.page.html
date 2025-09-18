@@ -32,13 +32,24 @@
                   </svg>
                 </div>
               </div>
-              <div class="wallets mt-24">
-                <app-wallet name="Wallet 1"></app-wallet>
-                <app-wallet name="Wallet 2"></app-wallet>
-                <app-wallet name="Wallet 2"></app-wallet>
+              <div class="wallets mt-24" [formGroup]="form">
+                <ng-container formArrayName="recipients">
+                  <div *ngFor="let ctrl of recipientsArray.controls; let i = index">
+                    <app-wallet [name]="'Wallet ' + (i+1)" [group]="ctrl" (removeRecipient)="removeRecipient(i)"></app-wallet>
+                    <div class="form-control__divider mt-12"></div>
+                  </div>
+                </ng-container>
               </div>
-              <p class="mt-8 text-danger text-center text-sm">Total percent exceeded. Make sure the total percent is equal to 100%.</p>
-              <button class="button button--dashed mt-12 button--w100">
+              <p class="mt-8 text-danger text-center text-sm" *ngIf="totalPct() !== 100">
+                Total percent exceeded. Make sure the total percent is equal to 100%.
+              </p>
+              <p class="mt-8 text-danger text-center text-sm" *ngIf="hasDuplicates()">
+                Recipient addresses must be unique.
+              </p>
+              <button class="button button--dashed mt-8" type="button" (click)="setMyAddress()">
+                Use my wallet for #1
+              </button>
+              <button class="button button--dashed mt-12 button--w100" type="button" (click)="addRecipient()">
                 <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="8.5" cy="8.5" r="6.375" stroke="white" />
                   <path d="M8.5 10.625L8.5 6.375" stroke="white" stroke-linecap="square" />
@@ -46,12 +57,15 @@
                 </svg>
                 <span>Add more recipients</span>
               </button>
-              <div class="custom-toggle mt-32">
-                <span [class.active]="!isImMutable">Mutable</span>
-                <ion-toggle [(ngModel)]="isImMutable" class="hidden-toggle"></ion-toggle>
-                <span [class.active]="isImMutable">Immutable</span>
+              <div class="custom-toggle mt-32" [formGroup]="form">
+                <span [class.active]="!form.value.mutable">Mutable</span>
+                <ion-toggle formControlName="mutable" class="hidden-toggle"></ion-toggle>
+                <span [class.active]="form.value.mutable">Immutable</span>
               </div>
-              <button class="button button--primary mt-32 button--w100" (click)="onCreateVault()">Create Vault</button>
+              <button class="button button--primary mt-32 button--w100"
+                [disabled]="busy() || form.invalid || totalPct() !== 100 || hasDuplicates()" (click)="create()">
+                {{ busy() ? 'Creating…' : 'Create Vault' }}
+              </button>
               <button class="button button--primary-outline mt-12 button--w100" routerLink="/select">Back</button>
             </div>
           </div>
