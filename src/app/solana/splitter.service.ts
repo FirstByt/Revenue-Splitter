@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PublicKey, SystemProgram } from '@solana/web3.js';
+import { PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
 import { AnchorProgramService } from './anchor-program.service';
 import { findConfigPda, findAuthorityInfoPda, findSplitterPda } from './pda';
 import { WalletService } from './wallet.service';
@@ -10,9 +10,10 @@ function toPk(v: PublicKey | string): PublicKey {
   return v instanceof PublicKey ? v : new PublicKey(v);
 }
 function toBigInt(u: any): bigint {
+  if (u === null || u === undefined) return 0n;
   if (typeof u === 'bigint') return u;
-  if (u && typeof u.toString === 'function') return BigInt(u.toString());
-  return BigInt(u as number);
+  const s = typeof u === 'number' ? Math.trunc(u).toString() : u.toString?.();
+  return BigInt(s ?? 0);
 }
 
 @Injectable({ providedIn: 'root' })
@@ -77,6 +78,44 @@ export class SplitterService {
     }
   }
 
+  private async ensureRecipientsOnChain(recipients: PublicKey[], payer: PublicKey) {
+    const program = await this.program();
+    const conn = program.provider.connection;
+
+    const missing: PublicKey[] = [];
+    for (const pk of recipients) {
+      const info = await conn.getAccountInfo(pk, 'confirmed');
+      if (!info) missing.push(pk);
+      else if (!info.owner.equals(SystemProgram.programId)) {
+        throw new Error(`Recipient is not a System account: ${pk.toBase58()}`);
+      }
+    }
+    if (!missing.length) return;
+
+    const LAMPORTS = 5_000;
+
+    const ixs = missing.map(pk =>
+      SystemProgram.transfer({ fromPubkey: payer, toPubkey: pk, lamports: LAMPORTS })
+    );
+    const tx = new Transaction().add(...ixs);
+
+    const { blockhash, lastValidBlockHeight } =
+      await conn.getLatestBlockhash({ commitment: 'confirmed' });
+
+    tx.recentBlockhash = blockhash;
+    tx.feePayer = payer;
+
+    const signed = await (program.provider.wallet as any).signTransaction(tx);
+    const sig = await conn.sendRawTransaction(signed.serialize(), { skipPreflight: false });
+    await conn.confirmTransaction({ signature: sig, blockhash, lastValidBlockHeight }, 'confirmed');
+
+    console.log('[recipients] created system accounts via transfers:', {
+      created: missing.map(m => m.toBase58()),
+      sig,
+    });
+  }
+
+  /** ---- Create vault ---- */
   async createVault(input: { recipients: UiRecipient[]; mutable: boolean }) {
     const program = await this.program();
     const programId = new PublicKey(program.programId);
@@ -93,27 +132,28 @@ export class SplitterService {
     if (input.recipients.length < 1 || input.recipients.length > 10) {
       throw new Error('Recipients must be 1..10');
     }
-    const total = input.recipients.reduce((s, r) => s + Number(r.percentage || 0), 0);
+    for (const r of input.recipients) {
+      if (!Number.isInteger(r.percentage) || r.percentage < 0 || r.percentage > 100) {
+        throw new Error('Each percentage must be an integer between 0 and 100');
+      }
+    }
+    const total = input.recipients.reduce((s, r) => s + (r.percentage || 0), 0);
     if (total !== 100) throw new Error('Total % must equal 100');
-    const dedup = new Set(input.recipients.map(r => r.address.trim()));
-    if (dedup.size !== input.recipients.length) throw new Error('Duplicate recipient');
+
+    const trimmed = input.recipients.map(r => ({ address: r.address.trim(), percentage: r.percentage }));
+    const dedup = new Set(trimmed.map(r => r.address));
+    if (dedup.size !== trimmed.length) throw new Error('Duplicate recipient');
+
+    const recipientsIDL = trimmed.map(r => ({
+      address: toPk(r.address),
+      percentage: r.percentage,
+    }));
+
+    await this.ensureRecipientsOnChain(recipientsIDL.map(r => r.address), authority);
 
     const aiRaw: any = await (program.account as any).authorityInfo.fetch(aiPda);
     const index = toBigInt(aiRaw.splittersAmount ?? 0n);
-
     const splitterPda = findSplitterPda(programId, cfgPda, authority, index);
-
-    const recipientsIDL = input.recipients.map(r => ({
-      address: toPk(r.address),
-      percentage: Number(r.percentage),
-    }));
-
-    console.log('[createVault] devnet sanity:',
-      '\nauthority:', authority.toBase58(),
-      '\nconfigPda:', cfgPda.toBase58(),
-      '\nauthorityInfoPda:', aiPda.toBase58(), ' splitters_amount=', index.toString(),
-      '\nsplitterPda:', splitterPda.toBase58()
-    );
 
     const sig: string = await (program.methods as any)
       .createSplitter(recipientsIDL, !!input.mutable)
@@ -127,7 +167,7 @@ export class SplitterService {
       })
       .rpc();
 
-    console.log('[createVault] sig:', sig);
+    console.log('[createVault] OK', { signature: sig, splitter: splitterPda.toBase58(), index: index.toString() });
     return { signature: sig, splitter: splitterPda, index };
   }
 
@@ -147,19 +187,24 @@ export class SplitterService {
     // layout Splitter: [8 discr][32 config][32 authority] → authority offset = 8 + 32
     const AUTHORITY_OFFSET = 8 + 32;
 
-    const all: any[] = await (program.account as any).splitter.all([
-      { memcmp: { offset: AUTHORITY_OFFSET, bytes: me.toBase58() } }
-    ]);
+    try {
+      const all: any[] = await (program.account as any).splitter.all([
+        { memcmp: { offset: AUTHORITY_OFFSET, bytes: me.toBase58() } },
+      ]);
 
-    return all.map(({ publicKey, account }) => ({
-      address: toPk(publicKey),
-      authority: toPk(account.authority),
-      index: toBigInt(account.index),
-      recipients: (account.recipients || []).map((r: any) => ({
-        address: toPk(r.address).toBase58(),
-        percentage: Number(r.percentage),
-      })),
-      mutable: !!account.mutable,
-    }));
+      return all.map(({ publicKey, account }) => ({
+        address: toPk(publicKey),
+        authority: toPk(account.authority),
+        index: toBigInt(account.index),
+        recipients: (account.recipients || []).map((r: any) => ({
+          address: toPk(r.address).toBase58(),
+          percentage: Number(r.percentage),
+        })),
+        mutable: !!account.mutable,
+      }));
+    } catch (e) {
+      console.error('[listMyVaults] failed', e);
+      return [];
+    }
   }
 }

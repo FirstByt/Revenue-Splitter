@@ -66,7 +66,7 @@
                 [disabled]="busy() || form.invalid || totalPct !== 100 || hasDuplicates" (click)="create()">
                 {{ busy() ? 'Creating…' : 'Create Vault' }}
               </button>
-              <button class="button button--primary mt-32 button--w100" (click)="onCreateVault()">
+              <button class="button button--primary mt-32 button--w100" (click)="create()">
                 {{ busy() ? 'Creating…' : 'Create Vault Dev' }}
               </button>
               <button class="button button--primary-outline mt-12 button--w100" routerLink="/select">Back</button>

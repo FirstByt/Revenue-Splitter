@@ -2,7 +2,7 @@ import { Component, HostListener, inject, signal, computed } from '@angular/core
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { WalletService } from 'src/app/solana/wallet.service';
-import { ConnectionService } from 'src/app/solana/connection.service';
+import { NetworkService } from 'src/app/solana/network.service';
 
 const INSTALL_URL: Record<string, string> = {
   Phantom:  'https://phantom.app/download',
@@ -19,8 +19,8 @@ const INSTALL_URL: Record<string, string> = {
 })
 export class HeaderComponent {
   ws = inject(WalletService);
-  conn = inject(ConnectionService);
-  
+  net = inject(NetworkService);
+
   menuOpen = signal(false);
   wallets = computed(() => this.ws.listWallets());
 
@@ -52,11 +52,13 @@ export class HeaderComponent {
   }
 
   async testRpc() {
-    const hash = await this.conn.getLatestBlockhash();
-    console.log('Devnet blockhash:', hash);
+    const conn = await this.net.getConnection();
+    const { blockhash } = await conn.getLatestBlockhash({ commitment: 'confirmed' });
+    console.log('Devnet blockhash:', blockhash);
+
     const pk = this.ws.publicKey();
     if (pk) {
-      const lamports = await this.conn.getBalance(pk);
+      const lamports = await conn.getBalance(pk, 'confirmed');
       console.log('Balance (lamports):', lamports);
     }
   }
@@ -65,9 +67,13 @@ export class HeaderComponent {
     const pk = this.ws.publicKey();
     if (!pk) return;
     try {
-      const sig = await this.conn.airdrop(pk, 1);
-      const bal = await this.conn.getBalance(pk);
+      const conn = await this.net.getConnection();
+      const sig = await conn.requestAirdrop(pk, 1e9); 
       console.log('Airdrop tx:', sig, '→ Explorer:', `https://explorer.solana.com/tx/${sig}?cluster=devnet`);
+
+      await conn.confirmTransaction(sig, 'confirmed');
+
+      const bal = await conn.getBalance(pk, 'confirmed');
       console.log('New balance (lamports):', bal);
     } catch (e: any) {
       console.error('Airdrop failed:', e?.message ?? e);

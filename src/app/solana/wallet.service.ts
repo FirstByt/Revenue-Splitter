@@ -62,8 +62,6 @@ export class WalletService {
         this.walletName.set(null);
         if (localStorage.getItem('lastWallet') === a.name) localStorage.removeItem('lastWallet');
       });
-      a.on('error', (e: WalletError) => console.error('[wallet]', e));
-
       a.on('readyStateChange', () => {
         this.adapters.set([...this.adapters()]);
       });
