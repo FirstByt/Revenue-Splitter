@@ -40,15 +40,15 @@
                   </div>
                 </ng-container>
               </div>
-              <p class="mt-8 text-danger text-center text-sm" *ngIf="totalPct() !== 100">
-                Total percent exceeded. Make sure the total percent is equal to 100%.
+              <p class="mt-8 text-danger text-center text-sm" *ngIf="totalPct !== 100">
+                Total percent is {{ totalPct }}%. It must be exactly 100%.
               </p>
-              <p class="mt-8 text-danger text-center text-sm" *ngIf="hasDuplicates()">
+              <p class="mt-8 text-danger text-center text-sm" *ngIf="hasDuplicates">
                 Recipient addresses must be unique.
               </p>
-              <button class="button button--dashed mt-8" type="button" (click)="setMyAddress()">
+              <!-- <button class="button button--dashed mt-8" type="button" (click)="setMyAddress()">
                 Use my wallet for #1
-              </button>
+              </button> -->
               <button class="button button--dashed mt-12 button--w100" type="button" (click)="addRecipient()">
                 <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="8.5" cy="8.5" r="6.375" stroke="white" />
@@ -63,8 +63,11 @@
                 <span [class.active]="form.value.mutable">Immutable</span>
               </div>
               <button class="button button--primary mt-32 button--w100"
-                [disabled]="busy() || form.invalid || totalPct() !== 100 || hasDuplicates()" (click)="create()">
+                [disabled]="busy() || form.invalid || totalPct !== 100 || hasDuplicates" (click)="create()">
                 {{ busy() ? 'Creating…' : 'Create Vault' }}
+              </button>
+              <button class="button button--primary mt-32 button--w100" (click)="onCreateVault()">
+                {{ busy() ? 'Creating…' : 'Create Vault Dev' }}
               </button>
               <button class="button button--primary-outline mt-12 button--w100" routerLink="/select">Back</button>
             </div>

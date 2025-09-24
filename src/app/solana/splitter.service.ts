@@ -9,7 +9,6 @@ export type UiRecipient = { address: string; percentage: number };
 function toPk(v: PublicKey | string): PublicKey {
   return v instanceof PublicKey ? v : new PublicKey(v);
 }
-
 function toBigInt(u: any): bigint {
   if (typeof u === 'bigint') return u;
   if (u && typeof u.toString === 'function') return BigInt(u.toString());
@@ -27,6 +26,7 @@ export class SplitterService {
     return this.anchor.getProgram();
   }
 
+  /** ---- Config ---- */
   async fetchConfig(): Promise<{
     admin: PublicKey;
     creationFee: bigint;
@@ -36,11 +36,9 @@ export class SplitterService {
     bump: number;
   }> {
     const program = await this.program();
-    const programId = toPk(program.programId as any);
+    const programId = new PublicKey(program.programId);
     const cfgPda = findConfigPda(programId);
-
     const raw: any = await (program.account as any).config.fetch(cfgPda);
-
     return {
       admin: toPk(raw.admin),
       creationFee: toBigInt(raw.creationFee),
@@ -53,7 +51,7 @@ export class SplitterService {
 
   async ensureAuthorityInfo(): Promise<PublicKey> {
     const program = await this.program();
-    const programId = toPk(program.programId as any);
+    const programId = new PublicKey(program.programId);
 
     const adapter = this.wallets.adapter;
     if (!adapter?.publicKey) throw new Error('Wallet is not connected');
@@ -81,7 +79,7 @@ export class SplitterService {
 
   async createVault(input: { recipients: UiRecipient[]; mutable: boolean }) {
     const program = await this.program();
-    const programId = toPk(program.programId as any);
+    const programId = new PublicKey(program.programId);
 
     const adapter = this.wallets.adapter;
     if (!adapter?.publicKey) throw new Error('Wallet is not connected');
@@ -97,24 +95,25 @@ export class SplitterService {
     }
     const total = input.recipients.reduce((s, r) => s + Number(r.percentage || 0), 0);
     if (total !== 100) throw new Error('Total % must equal 100');
-    const dedup = new Set(input.recipients.map(r => r.address));
+    const dedup = new Set(input.recipients.map(r => r.address.trim()));
     if (dedup.size !== input.recipients.length) throw new Error('Duplicate recipient');
 
     const aiRaw: any = await (program.account as any).authorityInfo.fetch(aiPda);
-    const nextIndex = toBigInt(aiRaw.splittersAmount ?? 0);
+    const index = toBigInt(aiRaw.splittersAmount ?? 0n);
+
+    const splitterPda = findSplitterPda(programId, cfgPda, authority, index);
 
     const recipientsIDL = input.recipients.map(r => ({
       address: toPk(r.address),
-      percentage: Number(r.percentage)
+      percentage: Number(r.percentage),
     }));
 
-    const remaining = recipientsIDL.map(r => ({
-      pubkey: r.address as PublicKey,
-      isWritable: false,
-      isSigner: false,
-    }));
-
-    const splitterPda = findSplitterPda(programId, cfgPda, authority, nextIndex);
+    console.log('[createVault] devnet sanity:',
+      '\nauthority:', authority.toBase58(),
+      '\nconfigPda:', cfgPda.toBase58(),
+      '\nauthorityInfoPda:', aiPda.toBase58(), ' splitters_amount=', index.toString(),
+      '\nsplitterPda:', splitterPda.toBase58()
+    );
 
     const sig: string = await (program.methods as any)
       .createSplitter(recipientsIDL, !!input.mutable)
@@ -126,13 +125,13 @@ export class SplitterService {
         config: cfgPda,
         systemProgram: SystemProgram.programId,
       })
-      .remainingAccounts(remaining) // ⬅️ додано
       .rpc();
 
-    return { signature: sig, splitter: splitterPda, index: nextIndex };
-}
+    console.log('[createVault] sig:', sig);
+    return { signature: sig, splitter: splitterPda, index };
+  }
 
-
+  /** ---- List my splitters ---- */
   async listMyVaults(): Promise<Array<{
     address: PublicKey;
     authority: PublicKey;
@@ -141,13 +140,11 @@ export class SplitterService {
     mutable: boolean;
   }>> {
     const program = await this.program();
-    const programId = toPk(program.programId as any);
-
     const adapter = this.wallets.adapter;
     if (!adapter?.publicKey) throw new Error('Wallet is not connected');
     const me = adapter.publicKey;
 
-    // layout Splitter: [8 discriminator][32 config][32 authority]
+    // layout Splitter: [8 discr][32 config][32 authority] → authority offset = 8 + 32
     const AUTHORITY_OFFSET = 8 + 32;
 
     const all: any[] = await (program.account as any).splitter.all([
@@ -160,7 +157,7 @@ export class SplitterService {
       index: toBigInt(account.index),
       recipients: (account.recipients || []).map((r: any) => ({
         address: toPk(r.address).toBase58(),
-        percentage: Number(r.percentage)
+        percentage: Number(r.percentage),
       })),
       mutable: !!account.mutable,
     }));

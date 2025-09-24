@@ -16,7 +16,7 @@
           <div class="steps-wrapper only-mobile">
             <app-step-info mainText="Your gateway to transparent Money Split on Chain"></app-step-info>
           </div>
-          <button class="button button--primary button--wider mt-32" routerLink="/select">Enter App</button>
+          <button class="button button--primary button--wider mt-32" routerLink="/select" [disabled]="!ws.connected()">Enter App</button>
           <div class="app-stats mt-64">
             <div class="app-stats__item">
               <div class="app-stats__item-value">1255</div>

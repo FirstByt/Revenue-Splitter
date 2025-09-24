@@ -58,7 +58,7 @@ export class AnchorProgramService {
   async getProgram(): Promise<Program> {
     const idl = await this.loadIdl();
     const provider = this.makeProvider();
-    return new Program(idl, provider);
+    return new Program(idl as Idl, provider);
   }
 
   getConnection() {

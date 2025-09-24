@@ -7,10 +7,18 @@
       </div>
 
       <div class="header__buttons">
-        <div class="only-desctop">
-          <button class="button button--primary" routerLink="/my-vaults">My Vaults</button>
-        </div>
-
+        @if (ws.connected()) {
+          <div class="only-desctop">
+            <button class="button button--primary" routerLink="/my-vaults">
+              <span>My Vaults</span>
+            </button>
+          </div>
+          <div class="only-mobile">
+            <button class="button button--primary button--min-size" routerLink="/my-vaults">
+              <img class="only-mobile" src="assets/icons/vaults.svg" />
+            </button>
+          </div>
+        }
         <div class="header-wallet" (click)="toggleMenu($event)">
           <div class="icon-wrapper">
             <img src="assets/icons/wallet.svg" />

@@ -7,7 +7,7 @@ const SPLITTER_SEED = Buffer.from('splitter');
 const u64le = (n: bigint) => { const b = Buffer.alloc(8); b.writeBigUInt64LE(n); return b; };
 
 export const findConfigPda = (programId: PublicKey) =>
-  PublicKey.findProgramAddressSync([CONFIG_SEED], programId)[0];
+  PublicKey.findProgramAddressSync([Buffer.from('config')], programId)[0];
 
 export const findAuthorityInfoPda = (programId: PublicKey, config: PublicKey, authority: PublicKey) =>
   PublicKey.findProgramAddressSync([AUTHORITY_INFO_SEED, config.toBuffer(), authority.toBuffer()], programId)[0];

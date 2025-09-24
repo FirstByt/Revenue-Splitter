@@ -57,7 +57,7 @@ export class CreateVaultPage implements OnInit {
 
   private makeRecipientGroup(): RecipientFG {
     return this.fb.group({
-      address: this.fb.nonNullable.control('', { validators: [] }),
+      address: this.fb.nonNullable.control('', { validators: [Validators.required, Validators.pattern(/^[1-9A-HJ-NP-Za-km-z]{32,44}$/)] }),
       percentage: this.fb.nonNullable.control(0, { validators: [Validators.min(1), Validators.max(100)] }),
     });
   }
@@ -77,14 +77,17 @@ export class CreateVaultPage implements OnInit {
     if (this.recipientsArray.length > 1) this.recipientsArray.removeAt(i);
   }
 
-  totalPct = computed(() =>
-    this.recipientsArray.controls.reduce((s, c) => s + (Number(c.value.percentage) || 0), 0)
-  );
+  get totalPct(): number {
+    return this.recipientsArray.controls
+      .reduce((s, c) => s + (Number(c.value.percentage) || 0), 0);
+  }
 
-  hasDuplicates = computed(() => {
-    const filled = this.recipientsArray.controls.map(c => (c.value.address || '').trim()).filter(Boolean);
+  get hasDuplicates(): boolean {
+    const filled = this.recipientsArray.controls
+      .map(c => (c.value.address || '').trim())
+      .filter(Boolean);
     return new Set(filled).size !== filled.length;
-  });
+  }
 
   private ensureConnected() {
     if (!this.ws.connected()) {
@@ -93,14 +96,20 @@ export class CreateVaultPage implements OnInit {
   }
 
   async create() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
     if (!this.ws.connected()) throw new Error('Connect your wallet first.');
-    if (this.totalPct() !== 100) throw new Error('Total percentage must be 100%.');
-    if (this.hasDuplicates()) throw new Error('Recipient addresses must be unique.');
+    if (this.totalPct !== 100) throw new Error('Total percentage must be 100%.');
+    if (this.hasDuplicates) throw new Error('Recipient addresses must be unique.');
 
     const recipients = this.recipientsArray.controls
       .map(c => ({ address: (c.value.address || '').trim(), percentage: Number(c.value.percentage || 0) }))
       .filter(r => r.address);
-
+  
+    console.log(recipients);
     const res = await this.svc.createVault({ recipients, mutable: !!this.form.value.mutable });
     console.log('Created vault:', { signature: res.signature, splitter: res.splitter.toBase58(), index: Number(res.index) });
 
