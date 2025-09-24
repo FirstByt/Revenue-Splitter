@@ -149,6 +149,12 @@ export class SplitterService {
       percentage: r.percentage,
     }));
 
+    const remaining = recipientsIDL.map(r => ({
+      pubkey: r.address,
+      isSigner: false,
+      isWritable: false,
+    }));
+
     await this.ensureRecipientsOnChain(recipientsIDL.map(r => r.address), authority);
 
     const aiRaw: any = await (program.account as any).authorityInfo.fetch(aiPda);
@@ -165,6 +171,7 @@ export class SplitterService {
         config: cfgPda,
         systemProgram: SystemProgram.programId,
       })
+      .remainingAccounts(remaining)
       .rpc();
 
     console.log('[createVault] OK', { signature: sig, splitter: splitterPda.toBase58(), index: index.toString() });
