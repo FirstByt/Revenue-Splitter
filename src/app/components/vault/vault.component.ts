@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Vault } from 'src/app/models/vault/vault';
 
 @Component({
   selector: 'app-vault',
@@ -7,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class VaultComponent implements OnInit {
+
+  @Input({required: true}) vault: Vault;
   
   constructor() { }
 

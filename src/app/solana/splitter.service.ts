@@ -3,8 +3,13 @@ import { PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
 import { AnchorProgramService } from './anchor-program.service';
 import { findConfigPda, findAuthorityInfoPda, findSplitterPda } from './pda';
 import { WalletService } from './wallet.service';
+import { utils } from '@coral-xyz/anchor';
+import { Vault } from '../models/vault/vault';
 
 export type UiRecipient = { address: string; percentage: number };
+
+const SPLITTER_DISCRIM = Uint8Array.from([187, 177, 147, 182, 44, 155, 130, 202]);
+const SPLITTER_DISCRIM_B58 = utils.bytes.bs58.encode(SPLITTER_DISCRIM);
 
 function toPk(v: PublicKey | string): PublicKey {
   return v instanceof PublicKey ? v : new PublicKey(v);
@@ -178,40 +183,96 @@ export class SplitterService {
     return { signature: sig, splitter: splitterPda, index };
   }
 
-  /** ---- List my splitters ---- */
-  async listMyVaults(): Promise<Array<{
-    address: PublicKey;
-    authority: PublicKey;
-    index: bigint;
-    recipients: Array<{ address: string; percentage: number }>;
-    mutable: boolean;
-  }>> {
+  async listMyVaults(): Promise<Vault[]> {
     const program = await this.program();
+    const conn = program.provider.connection;
+
     const adapter = this.wallets.adapter;
     if (!adapter?.publicKey) throw new Error('Wallet is not connected');
     const me = adapter.publicKey;
 
-    // layout Splitter: [8 discr][32 config][32 authority] → authority offset = 8 + 32
-    const AUTHORITY_OFFSET = 8 + 32;
+    const filters = [
+      { memcmp: { offset: 0, bytes: SPLITTER_DISCRIM_B58 } },
+      { memcmp: { offset: 8 + 32, bytes: me.toBase58() } },
+    ];
 
-    try {
-      const all: any[] = await (program.account as any).splitter.all([
-        { memcmp: { offset: AUTHORITY_OFFSET, bytes: me.toBase58() } },
-      ]);
+    const raws = await conn.getProgramAccounts(new PublicKey(program.programId), {
+      commitment: 'confirmed',
+      filters,
+    });
 
-      return all.map(({ publicKey, account }) => ({
-        address: toPk(publicKey),
-        authority: toPk(account.authority),
-        index: toBigInt(account.index),
-        recipients: (account.recipients || []).map((r: any) => ({
-          address: toPk(r.address).toBase58(),
-          percentage: Number(r.percentage),
-        })),
-        mutable: !!account.mutable,
-      }));
-    } catch (e) {
-      console.error('[listMyVaults] failed', e);
-      return [];
+    const out: Array<Vault> = [];
+
+    for (const { pubkey, account } of raws) {
+      const buf = Buffer.from(account.data); 
+
+      try {
+        const config = new PublicKey(buf.subarray(8, 8 + 32));
+        const authority = new PublicKey(buf.subarray(8 + 32, 8 + 32 + 32));
+        const index = Number(buf.readBigUInt64LE(8 + 32 + 32));
+        let p = 8 + 32 + 32 + 8;
+
+        // ---- recipients: vec<Recipient> ----
+        if (p + 4 > buf.length) throw new Error('truncated before recipients length');
+        const n = buf.readUInt32LE(p); p += 4;
+
+        const tryParseRecipients = (bytesPerPercent: 1 | 2) => {
+          const recs: Array<{ address: string; percentage: number }> = [];
+          const itemSize = 32 + bytesPerPercent;
+          if (p + n * itemSize > buf.length) return null;
+
+          let q = p;
+          for (let i = 0; i < n; i++) {
+            const addr = new PublicKey(buf.subarray(q, q + 32)); q += 32;
+            const pct = bytesPerPercent === 2 ? buf.readUInt16LE(q) : buf.readUInt8(q);
+            q += bytesPerPercent;
+            recs.push({ address: addr.toBase58(), percentage: pct });
+          }
+          return { recs, next: p + n * itemSize };
+        };
+
+        let parsed = tryParseRecipients(2 /* u16 */);
+        if (!parsed) parsed = tryParseRecipients(1 /* u8 (legacy) */);
+        if (!parsed) throw new Error('recipients vector out of bounds');
+
+        const recipients = parsed.recs;
+        p = parsed.next;
+
+        // ---- mutable ----
+        let mutable = false;
+        if (p + 1 <= buf.length) {
+          mutable = buf[p] !== 0; p += 1;
+        }
+
+        // ---- bump ----
+        if (p + 1 <= buf.length) {
+          /* const bump = buf[p]; */ p += 1;
+        }
+
+        let name = '';
+        if (p + 4 <= buf.length) {
+          const slen = buf.readUInt32LE(p); p += 4;
+          if (slen > 0 && p + slen <= buf.length) {
+            name = Buffer.from(buf.subarray(p, p + slen)).toString('utf8');
+            p += slen;
+          }
+        }
+
+        out.push({
+          address: pubkey,
+          authority,
+          index: BigInt(index),
+          recipients,
+          mutable,
+          name: name ?? '',
+        });
+      } catch (e) {
+        console.warn('[listMyVaults][skip]', pubkey.toBase58(), (e as Error)?.message);
+        continue;
+      }
     }
+
+    out.sort((a, b) => Number(a.index - b.index));
+    return out;
   }
 }

@@ -189,6 +189,10 @@
         {
           "name": "mutable",
           "type": "bool"
+        },
+        {
+          "name": "name",
+          "type": "string"
         }
       ]
     },
@@ -581,6 +585,10 @@
         {
           "name": "mutable",
           "type": "bool"
+        },
+        {
+          "name": "name",
+          "type": "string"
         }
       ]
     },
@@ -915,6 +923,10 @@
                 }
               }
             }
+          },
+          {
+            "name": "name",
+            "type": "string"
           }
         ]
       }
@@ -969,6 +981,10 @@
           {
             "name": "bump",
             "type": "u8"
+          },
+          {
+            "name": "name",
+            "type": "string"
           }
         ]
       }
@@ -1058,6 +1074,10 @@
           {
             "name": "splitter",
             "type": "pubkey"
+          },
+          {
+            "name": "name",
+            "type": "string"
           },
           {
             "name": "mutable",

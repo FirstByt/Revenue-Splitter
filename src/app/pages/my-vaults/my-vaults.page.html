@@ -3,46 +3,63 @@
     <app-header></app-header>
     <div class="content">
       <div class="container">
-
         <div class="content-layout content-layout--aline-center">
           <div class="content-layout__center">
             <div>
               <app-step-info mainText="My Vaults and Participationss"></app-step-info>
             </div>
-            <div class="content-layout__cards mt-32">
-              <div class="content-layout__card">
-                <div class="custom-search">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="7.33341" cy="7.33317" r="4.66667" stroke="#525764" stroke-width="2" />
-                    <path d="M13.3333 13.3335L11.3333 11.3335" stroke="#525764" stroke-width="2" stroke-linecap="round" />
-                  </svg>
-                  <input type="text" class="plain-input" placeholder="Search vault...">
+
+            <ng-container *ngIf="connected(); else notConnected">
+              <div class="content-layout__cards mt-32">
+                <div class="content-layout__card">
+                  <div class="custom-search">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="7.33341" cy="7.33317" r="4.66667" stroke="#525764" stroke-width="2" />
+                      <path d="M13.3333 13.3335L11.3333 11.3335" stroke="#525764" stroke-width="2"
+                        stroke-linecap="round" />
+                    </svg>
+                    <input type="text" class="plain-input" placeholder="Search vault...">
+                  </div>
+
+                  <div *ngIf="loading()" class="mt-24 text-sm opacity-70">Loading…</div>
+
+                  <div class="vaults mt-24" *ngIf="!loading()">
+                    <app-vault *ngFor="let v of vaults()" [vault]="v"></app-vault>
+                    <div class="text-sm opacity-70 mt-16" *ngIf="!vaults().length">
+                      You don't have any vaults yet.
+                    </div>
+                  </div>
+
+                  <div class="mt-32">
+                    <div class="attention">IF you want to Create a new Vault Please click on the button Bellow</div>
+                  </div>
+                  <button class="button button--primary mt-12 button--w100" routerLink="/select">
+                    Create Another VAULT
+                  </button>
                 </div>
-                <div class="vaults mt-24">
-                  <app-vault></app-vault>
-                  <app-vault></app-vault>
-                  <app-vault></app-vault>
-                  <!-- <div *ngFor="let v of vaults()">
-                    <div>{{ v.address.toBase58() }} — {{ v.mutable ? 'Mutable' : 'Immutable' }}</div>
-                    <ul>
-                      <li *ngFor="let r of v.recipients">{{ r.address }} — {{ r.percentage }}%</li>
-                    </ul>
-                  </div> -->
-                </div>
-                <div class="mt-32">
-                  <div class="attention">IF you want to Create a new Vault Please click on the button Bellow</div>
-                </div>
-                <button class="button button--primary mt-12 button--w100" routerLink="/select">Create Another VAULT</button>
+
+                <!-- 
+                <div class="content-layout__card">
+                  <div class="vault-history">history</div>
+                </div> -->
               </div>
-              <!-- <div class="content-layout__card">
-                <div class="vault-history">
-                  history
+            </ng-container>
+
+            <ng-template #notConnected>
+              <div class="content-layout__cards mt-32">
+                <div class="content-layout__card">
+                  <div class="p-24 rounded-xl border border-neutral-700/50 bg-neutral-800/30">
+                    <div class="font-medium mb-8">Wallet not connected</div>
+                    <div class="text-sm opacity-80 mb-16">
+                      Connect your wallet in the header to view your vaults.
+                    </div>
+                  </div>
                 </div>
-              </div> -->
-            </div>
+              </div>
+            </ng-template>
+
           </div>
         </div>
-
       </div>
     </div>
   </div>

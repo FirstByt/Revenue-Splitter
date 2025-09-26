@@ -1,11 +1,12 @@
 <div class="vault">
   <div class="vault__wrapper">
     <div class="vault__main">
-      <p class="text-sm no-wrap">VAULT 1</p>
+      <p class="text-sm no-wrap">{{ vault.name ? vault.name : 'Vault name'}}</p>
       <div class="vault__inputs">
-        <div class="form-control"><p class="text-mutted">Mutable</p></div>
+        <div class="form-control"><p class="text-mutted">{{ vault.mutable ? 'Mutable' : 'Unmutable'}}</p></div>
         <div class="form-control">
-          <input id="cc" type="text" class="plain-input" placeholder="-">
+          <!-- <div>{{vault.recipients[0].address}}</div> -->
+          <input id="cc" type="text" class="plain-input" placeholder="-" [value]="vault.recipients[0].address" disabled>
           <div class="form-control__divider"></div>
           <div class="icon-wrapper cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
@@ -20,7 +21,8 @@
       <div class="form-control">
         <p class="text-mutted">%</p>
         <div class="form-control__divider"></div>
-        <input id="cc" type="number" class="plain-input text-center" placeholder="-" style="max-width: 24px">
+        <div>{{vault.recipients[0].percentage}}</div>
+        <!-- <input id="cc" type="number" class="plain-input text-center" placeholder="-" style="max-width: 24px" [value]="vault.recipients[0].percentage"> -->
       </div>
     </div>
     <div class="vault__footer">

@@ -118,4 +118,24 @@ export class WalletService {
   get adapter(): AnyAdapter | null {
     return this.selected;
   }
+
+  async autoConnect() {
+    if (this.connected()) return;
+
+    const last = localStorage.getItem('lastWallet');
+    if (last) this.select(last);
+
+    const sel = this.adapter;
+    if (!sel) return;
+
+    const connectable = sel.readyState === WalletReadyState.Installed || sel.readyState === WalletReadyState.Loadable;
+    if (!connectable) return;
+
+    try {
+      await sel.connect(); 
+    } catch (e: any) {
+      if (e?.name === 'WalletNotReadyError' || e?.name === 'WalletDisconnectedError') return;
+      console.warn('[wallet][autoConnect] ', e);
+    }
+  }
 }
