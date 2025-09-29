@@ -121,7 +121,7 @@ export class SplitterService {
   }
 
   /** ---- Create vault ---- */
-  async createVault(input: { recipients: UiRecipient[]; mutable: boolean }) {
+  async createVault(input: { recipients: UiRecipient[]; mutable: boolean, name: string }) {
     const program = await this.program();
     const programId = new PublicKey(program.programId);
 
@@ -167,7 +167,7 @@ export class SplitterService {
     const splitterPda = findSplitterPda(programId, cfgPda, authority, index);
 
     const sig: string = await (program.methods as any)
-      .createSplitter(recipientsIDL, !!input.mutable)
+      .createSplitter(recipientsIDL, !!input.mutable, input.name)
       .accounts({
         splitter: splitterPda,
         authority,

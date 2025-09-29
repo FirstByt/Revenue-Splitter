@@ -47,6 +47,13 @@ export class CreateVaultPage implements OnInit {
 
   form = this.fb.group({
     mutable: this.fb.nonNullable.control(true),
+    name: this.fb.nonNullable.control('', {
+    validators: [
+      Validators.required,
+      Validators.pattern(/\S/),
+      Validators.maxLength(64),
+    ],
+  }),
     recipients: this.fb.array<RecipientFG>([
       this.makeRecipientGroup(),
       this.makeRecipientGroup(),
@@ -69,6 +76,10 @@ export class CreateVaultPage implements OnInit {
         validators: [Validators.required, Validators.min(1), Validators.max(100)],
       }),
     });
+  }
+
+  get nameCtrl() {
+    return this.form.get('name') as FormControl<string>;
   }
 
   get recipientsArray(): FormArray<RecipientFG> {
@@ -152,8 +163,9 @@ export class CreateVaultPage implements OnInit {
     this.busy.set(true);
     try {
       await this.preflightRecipients(recipients.map(r => r.address));
-
+      const name = (this.nameCtrl.value ?? '').trim();
       const res = await this.svc.createVault({
+        name,
         recipients,
         mutable: !!this.form.value.mutable,
       });
@@ -164,7 +176,7 @@ export class CreateVaultPage implements OnInit {
         index: Number(res.index),
       });
 
-      this.router.navigate(['/my-vaults']);
+      this.router.navigate(['/create-vault-success']);
     } catch (e: any) {
       console.error('Create vault error:', e?.message ?? e);
     } finally {

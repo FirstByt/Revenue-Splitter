@@ -17,12 +17,12 @@
                 commentText="In order to start, please select options bellow"
               ></app-step-info>
             </div>
-            <div class="content-layout__card mt-32">
+            <div class="content-layout__card mt-32" [formGroup]="form">
               <div class="vault-name">
                 <div class="form-control">
                   <p class="text-mutted text-sm no-wrap">Vault Name</p>
                   <div class="form-control__divider"></div>
-                  <input type="text" class="plain-input plain-input--primary" placeholder="-">
+                  <input formControlName="name" type="text" class="plain-input plain-input--primary" placeholder="-">
                 </div>
                 <div class="icon-wrapper cursor-pointer">
                   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
@@ -32,7 +32,7 @@
                   </svg>
                 </div>
               </div>
-              <div class="wallets mt-24" [formGroup]="form">
+              <div class="wallets mt-24">
                 <ng-container formArrayName="recipients">
                   <div *ngFor="let ctrl of recipientsArray.controls; let i = index">
                     <app-wallet [name]="'Wallet ' + (i+1)" [group]="ctrl" (removeRecipient)="removeRecipient(i)"></app-wallet>
@@ -66,9 +66,9 @@
                 [disabled]="busy() || form.invalid || totalPct !== 100 || hasDuplicates" (click)="create()">
                 {{ busy() ? 'Creating…' : 'Create Vault' }}
               </button>
-              <button class="button button--primary mt-32 button--w100" (click)="create()">
+              <!-- <button class="button button--primary mt-32 button--w100" (click)="create()">
                 {{ busy() ? 'Creating…' : 'Create Vault Dev' }}
-              </button>
+              </button> -->
               <button class="button button--primary-outline mt-12 button--w100" routerLink="/select">Back</button>
             </div>
           </div>
