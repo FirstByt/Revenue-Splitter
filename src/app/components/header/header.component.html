@@ -26,26 +26,38 @@
           <span class="text-sm no-wrap">
             {{ ws.connected() ? ws.shortPubkey() : 'Connect Wallet' }}
           </span>
+          <div class="header-wallet__badge" *ngIf="ws.connected()">
+            <img src="assets/icons/done.svg" />
+          </div>
         </div>
 
         <div class="wallet-menu" *ngIf="menuOpen()">
-          <ng-container *ngIf="!ws.connected(); else connectedTpl">
-            <div class="menu-title">Select wallet</div>
-        
-            <button class="menu-item" *ngFor="let w of wallets()" [class.disabled]="!w.connectable"
+          @if (!ws.connected()) {
+          <div class="wallet-menu__title">Select wallet</div>
+
+          <div class="wallet-menu__list">
+            <button class="wallet-menu__item wallet-menu__item--option" *ngFor="let w of wallets()"
+              [class.wallet-menu__item--installed]="w.connectable" [class.wallet-menu__item--not-installed]="!w.connectable"
               (click)="w.connectable ? selectAndConnect(w.name) : onInstall(w.name, $event)">
-              {{ w.name }} <span *ngIf="!w.connectable" style="opacity:.7;">— Install</span>
+              <span class="wallet-menu__name">{{ w.name }}</span>
+              <span class="wallet-menu__badge" [class.wallet-menu__badge--ok]="w.connectable"
+                [class.wallet-menu__badge--info]="!w.connectable">
+                {{ w.connectable ? 'Installed' : 'Install' }}
+              </span>
             </button>
-          </ng-container>
-        
-          <ng-template #connectedTpl>
-            <div class="menu-title">{{ ws.walletName() }}</div>
-            <div class="menu-sub">{{ ws.shortPubkey() }}</div>
-            <button class="menu-item" (click)="testRpc()">Test RPC</button>
-            <button class="menu-item" (click)="airdrop1()">Airdrop 1 SOL (devnet)</button>
-            <button class="menu-item" (click)="disconnect()">Disconnect</button>
-          </ng-template>
+          </div>
+          } @else {
+          <div class="wallet-menu__title">{{ ws.walletName() }}</div>
+          <div class="wallet-menu__sub">{{ ws.shortPubkey() }}</div>
+
+          <div class="wallet-menu__list">
+            <!-- <button class="wallet-menu__item wallet-menu__item--action" (click)="testRpc()">Test RPC</button>
+            <button class="wallet-menu__item wallet-menu__item--action" (click)="airdrop1()">Airdrop 1 SOL (devnet)</button> -->
+            <button class="wallet-menu__item wallet-menu__item--action" (click)="disconnect()">Disconnect</button>
+          </div>
+          }
         </div>
+
       </div>
     </div>
   </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonContent, IonToggle } from '@ionic/angular/standalone';
 import { PublicKey, SystemProgram } from '@solana/web3.js';
@@ -13,6 +13,7 @@ import { WlletComponent } from 'src/app/components/wallet/wallet.component';
 import { WalletService } from 'src/app/solana/wallet.service';
 import { SplitterService } from 'src/app/solana/splitter.service';
 import { NetworkService } from 'src/app/solana/network.service';
+import { clampToRange } from 'src/app/core/utils/utils';
 
 type RecipientFG = FormGroup<{
   address: FormControl<string>;
@@ -42,8 +43,10 @@ export class CreateVaultPage implements OnInit {
   private ws      = inject(WalletService);
   private net     = inject(NetworkService);
   private svc     = inject(SplitterService);
+  private route   = inject(ActivatedRoute);
 
   busy = signal(false);
+  connected = computed(() => this.ws.connected());
 
   form = this.fb.group({
     mutable: this.fb.nonNullable.control(true),
@@ -60,7 +63,20 @@ export class CreateVaultPage implements OnInit {
     ]),
   });
 
-  ngOnInit() {}
+  ngOnInit() {
+    const qp = this.route.snapshot.queryParamMap.get('count');
+    const n = clampToRange(parseInt(qp ?? ''), 1, 10) ?? this.recipientsArray.length;
+    this.setRecipientsCount(n);
+  }
+
+  private setRecipientsCount(n: number) {
+    const cur = this.recipientsArray.length;
+    if (n > cur) {
+      for (let i = cur; i < n; i++) this.recipientsArray.push(this.makeRecipientGroup());
+    } else if (n < cur) {
+      for (let i = cur - 1; i >= n; i--) this.recipientsArray.removeAt(i);
+    }
+  }
 
   // ---------- Helpers ----------
   private makeRecipientGroup(): RecipientFG {

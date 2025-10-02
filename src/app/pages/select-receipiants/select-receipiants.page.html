@@ -5,34 +5,51 @@
       <div class="container">
 
         <div class="content-layout">
-          <div class="content-layout__side content-layout__side--left">
-            <div class="content-layout__progress">
-              <app-create-vault-progress></app-create-vault-progress>
+
+          @if(connected()) {
+            <div class="content-layout__side content-layout__side--left">
+              <div class="content-layout__progress">
+                <app-create-vault-progress></app-create-vault-progress>
+              </div>
             </div>
-          </div>
-          <div class="content-layout__center">
-            <div>
-              <app-step-info mainText="Your gateway to transparent Money Split on Chain"
-                commentText="In order to start, please select options bellow"
-              ></app-step-info>
-            </div>
-            <div class="content-layout__card content-layout__card--center mt-32">
-              <div class="selector mt-24">
-                <div>
-                  <p class="text-sm text-bold">Number of recipients</p>
-                  <p class="text-xs text-mutted">Up to 10 wallets</p>
+            <div class="content-layout__center">
+              <div>
+                <app-step-info mainText="Your gateway to transparent Money Split on Chain"
+                  commentText="In order to start, please select options bellow"></app-step-info>
+              </div>
+              <div class="content-layout__card content-layout__card--center mt-32" [formGroup]="form">
+                <div class="selector mt-24">
+                  <div>
+                    <p class="text-sm text-bold">Number of recipients</p>
+                    <p class="text-xs text-mutted">Up to 10 wallets</p>
+                  </div>
+                  <div>
+                    <ion-select interface="popover" formControlName="count" class="recipients-select"
+                      aria-label="Number of recipients" [interfaceOptions]="{ cssClass: 'recipients-popover' }">
+                      <ion-select-option *ngFor="let n of counts" [value]="n">{{ n }}</ion-select-option>
+                    </ion-select>
+                  </div>
                 </div>
-                <div class="form-control">
-                  <input id="cc" type="number" class="plain-input text-center" placeholder="-" style="max-width: 32px">
+                <button class="button button--primary mt-24 button--w100" (click)="onSubmit()">Continue</button>
+              </div>
+            </div>
+            <div class="content-layout__side content-layout__side--right"></div>
+          } @else {
+            <div class="content-layout__cards mt-32">
+              <div class="content-layout__card">
+                <div class="p-24 rounded-xl border border-neutral-700/50 bg-neutral-800/30">
+                  <div class="font-medium mb-8">Wallet not connected</div>
+                  <div class="text-sm opacity-80 mb-16">
+                    Connect your wallet in the header.
+                  </div>
                 </div>
               </div>
-              <button class="button button--primary mt-24 button--w100" routerLink="/create-vault">Continue</button>
             </div>
-          </div>
-          <div class="content-layout__side content-layout__side--right"></div>
+          }
         </div>
-
+        
       </div>
     </div>
   </div>
 </ion-content>
+

@@ -9,7 +9,7 @@
               <app-step-info mainText="My Vaults and Participationss"></app-step-info>
             </div>
 
-            <ng-container *ngIf="connected(); else notConnected">
+            @if(connected()) {
               <div class="content-layout__cards mt-32">
                 <div class="content-layout__card">
                   <div class="custom-search">
@@ -24,8 +24,8 @@
                   <div *ngIf="loading()" class="mt-24 text-sm opacity-70">Loading…</div>
 
                   <div class="vaults mt-24" *ngIf="!loading()">
-                    <app-vault *ngFor="let v of vaults()" [vault]="v"></app-vault>
-                    <div class="text-sm opacity-70 mt-16" *ngIf="!vaults().length">
+                    <app-vault *ngFor="let v of vaults" [vault]="v"></app-vault>
+                    <div class="text-sm opacity-70 mt-16" *ngIf="!vaults.length">
                       You don't have any vaults yet.
                     </div>
                   </div>
@@ -43,9 +43,7 @@
                   <div class="vault-history">history</div>
                 </div> -->
               </div>
-            </ng-container>
-
-            <ng-template #notConnected>
+            } @else {
               <div class="content-layout__cards mt-32">
                 <div class="content-layout__card">
                   <div class="p-24 rounded-xl border border-neutral-700/50 bg-neutral-800/30">
@@ -56,8 +54,7 @@
                   </div>
                 </div>
               </div>
-            </ng-template>
-
+            }
           </div>
         </div>
       </div>

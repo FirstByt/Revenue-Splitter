@@ -9,3 +9,24 @@
   padding: 10px;
   width: 100%;
 }
+
+.recipients-select {
+  height: 32px;
+  min-height: 32px;
+  font-size: 14px;
+  --background: rgba(255, 255, 255, 0.04);
+  --color: #e7ebf3;
+  --placeholder-color: #8d93a1;
+  --placeholder-opacity: 1;
+  --border-radius: 5px;
+  --padding-start: 10px;
+  --padding-end: 10px;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 5px;
+
+  &::part(container) {
+    height: 32px;
+    min-height: 32px;
+  }
+}

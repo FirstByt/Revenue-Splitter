@@ -30,9 +30,23 @@
   backdrop-filter: blur(14px);
   cursor: pointer;
   position: relative;
-
   img {
     min-width: 15px;
+  }
+  &__badge {
+    width: 14px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #34c759;
+    border-radius: 50%;
+    img {
+      min-width: 7px;
+    }
   }
 }
 
@@ -40,45 +54,117 @@
   position: absolute;
   right: 0;
   top: calc(100% + 8px);
-  min-width: 220px;
-  padding: 8px;
-  border-radius: 12px;
   z-index: 1000;
 
+  min-width: 260px;
+  padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(72, 79, 94, 0.95);
+  border-radius: 16px;
+
+  background: rgba(72, 79, 94, 0.3);
   backdrop-filter: blur(14px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
 
   display: grid;
-  gap: 6px;
+  gap: 10px;
 
-  .menu-title {
+  &__title {
     font-weight: 600;
-    opacity: .9;
+    opacity: .95;
   }
 
-  .menu-sub {
+  &__sub {
     font-size: 12px;
     opacity: .75;
-    margin-bottom: 6px;
+    margin-top: -6px;
   }
 
-  .menu-item {
+  &__list {
+    display: grid;
+    gap: 8px;
+  }
+
+  /* Базова «картка» */
+  &__item {
     width: 100%;
     text-align: left;
-    padding: 8px 10px;
-    border-radius: 8px;
+    padding: 14px 16px;
+    border-radius: 16px;
     border: 1px solid #3E4352;
     background: rgba(72, 79, 94, 0.30);
     color: #fff;
     cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    transition:
+      border-color .2s ease,
+      box-shadow .2s ease,
+      color .2s ease,
+      background-color .2s ease;
+
+    &:hover,
+    &:focus-visible {
+      border-color: #34c759;
+      /* зелений як на макеті */
+      box-shadow: 0 0 0 2px rgba(52, 199, 89, .25) inset;
+      outline: none;
+    }
   }
 
-  .menu-item:hover {
-    border-color: #60DBF5;
-  }
-}
+  /* Варіант «опція гаманця» */
+  // &__item--option {}
 
-.menu-item.disabled {
-  opacity: .7;
+  /* Дії в підключеному стані */
+  &__item--action {
+    justify-content: flex-start;
+    font-weight: 500;
+
+    &:hover,
+    &:focus-visible {
+      border-color: #60DBF5;
+      box-shadow: 0 0 0 2px rgba(96, 219, 245, .22) inset;
+    }
+  }
+
+  /* Стан встановлено/не встановлено (фон трохи різний) */
+  &__item--installed {
+    background: rgba(72, 79, 94, 0.35);
+  }
+
+  &__item--not-installed {
+    background: rgba(72, 79, 94, 0.25);
+  }
+
+  &__name {
+    font-size: 18px;
+    line-height: 1.1;
+    font-weight: 600;
+    letter-spacing: .2px;
+  }
+
+  &__badge {
+    font-size: 12px;
+    line-height: 1;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    opacity: .95;
+    user-select: none;
+
+    &--ok {
+      color: #1fcf6d;
+      background: rgba(31, 207, 109, .12);
+      border-color: rgba(31, 207, 109, .35);
+    }
+
+    &--info {
+      color: #5aa7ff;
+      background: rgba(90, 167, 255, .12);
+      border-color: rgba(90, 167, 255, .35);
+    }
+  }
 }
